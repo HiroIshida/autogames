@@ -32,17 +32,27 @@ def dispatch(address_, method, args):
 
 def loop_handler(connection, address):
     while True:
-        bin_data = connection.recv(1024)
-        if not bin_data:
-            break
-        str_data = bin_data.decode()
-        dict_data = json.loads(str_data)
+        try:
+            bin_data = connection.recv(1024)
+            if not bin_data:
+                break
+            str_data = bin_data.decode()
+            dict_data = json.loads(str_data)
 
-        method = dict_data["method"]
-        args = dict_data["args"]
-        state = dispatch(address, method, args)
-        message = state[1].encode()
-        conn.sendall(message)
+            method = dict_data["method"]
+            args = dict_data["args"]
+            state = dispatch(address, method, args)
+            message = state[1].encode()
+            conn.sendall(message)
+        except IndexError:
+            continue
+        except KeyboardInterrupt:
+            print("Exit from main program")
+            sock.close()
+            import os
+            os._exit(1)
+            break
+
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # reconnectable client
@@ -69,3 +79,5 @@ while True:
         dispatch(addr, "set_new_player", {})
         thread = threading.Thread(target = loop_handler, args = (conn, addr))
         thread.start()
+
+sock.close()
