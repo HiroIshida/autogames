@@ -10,5 +10,7 @@ install:
 script:
   # check python format
   - autopep8 -r . --diff --exit-code
+  # check if game works correctly
+  - python tictactoe/test/check_tictactoe.py
 
 sudo: false

@@ -6,7 +6,7 @@
 import socket
 import json
 import threading
-from tictoctoe import TictactoeGame
+from tictactoe import TictactoeGame
 
 game_field = TictactoeGame(3)
 
