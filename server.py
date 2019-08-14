@@ -11,12 +11,17 @@ from tictoctoe import TictactoeGame
 
 game_field = TictactoeGame(3)
 
-def dispatch(method, args):
+def dispatch(address, method, args):
+    if method == "set_new_player":
+        state = game_field.set_new_player(address)
+
     if method == "put":
-        game_field.put(args["position"])
+        state = game_field.put(address, args["position"])
 
     if method == "show":
-        game_field.show()
+        state = game_field.show()
+    return state
+
 
 def loop_handler(connection, address):
     while True:
@@ -28,9 +33,9 @@ def loop_handler(connection, address):
 
         method = dict_data["method"]
         args = dict_data["args"]
-        dispatch(method, args)
-        conn.sendall(b'received')
-
+        state = dispatch(address, method, args)
+        message = state[1].encode()
+        conn.sendall(message)
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 HOST = '127.0.0.1'
@@ -47,20 +52,10 @@ while True:
         sock.close()
         exit()
         break
-    print("[client adress]=>{}".format(addr[0]))
+    print("[client address]=>{}".format(addr[0]))
     print("[client port]=>{}".format(addr[1]))
     client_list.append((conn, addr))
+    dispatch(addr, "set_new_player", {})
     thread = threading.Thread(target = loop_handler, args = (conn, addr))
     thread.start()
-
-
-
-
-
-
-
-
-
-
-
 
