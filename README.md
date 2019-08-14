@@ -1,2 +1,6 @@
-# note
-When an error like `address already in use` appears, search a pid via `lsof -i` and kill it. 
+## install
+```
+git clone https://github.com/HiroIshida/tictoctoe.git
+cd tictactoe
+pip install --user .
+```
