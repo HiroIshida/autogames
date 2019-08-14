@@ -12,10 +12,19 @@ class TictactoeGame:
         self.player_address_list.append(player_address)
         return (True, "total player numbers is " + str(len(self.player_address_list)))
 
-    def put(self, player_address, position): 
+    def put(self, player_address, position):
+        x = position[0]
+        y = position[1]
+
+        # invalid operation
+        if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
+            return (False, "out of the game field")
+        if not self.field[x][y] == 0:
+            return (False, "there is already a stone here")
+
         if eq_address(player_address, self.player_address_list[0]):
             player_no = 0
-        else: 
+        else:
             player_no = 1
 
         if not player_no == self.current_player_no:
@@ -23,16 +32,7 @@ class TictactoeGame:
 
         stone = -1 if player_no == 0 else 1
 
-        x = position[0]
-        y = position[1]
-
-        # invalid operation
-        if not self.field[x][y] == 0:
-            return (False, "there is already a stone here")
-        if x<0 or x >= self.dim or y < 0 or y>= self.dim:
-            return (False, "out of the game field")
-
-        # put a stone;  
+        # put a stone;
         self.field[x][y] = stone
         self.current_player_no = (self.current_player_no + 1)%2
         return (True, self.get_pretty_gameboard())
@@ -57,7 +57,7 @@ class TictactoeGame:
                     str_stone = "X|"
                 x_str_line += str_stone
 
-            y_str_line += (x_str_line + "\n") 
+            y_str_line += (x_str_line + "\n")
         return y_str_line
 
     def _check_checkmate(self):
@@ -78,4 +78,3 @@ if __name__=='__main__':
     game_field.put((2, 2))
     game_field.put((1, 2))
     game_field.show()
-

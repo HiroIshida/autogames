@@ -45,8 +45,6 @@ def loop_handler(connection, address):
             state = dispatch(address, method, args)
             message = state[1].encode()
             connection.sendall(message)
-        except IndexError:
-            continue
         except KeyboardInterrupt:
             print("Exit from main program")
             sock.close()
