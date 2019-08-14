@@ -7,6 +7,7 @@ import json
 
 
 class Player:
+
     def __init__(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
@@ -39,6 +40,7 @@ class Player:
         str_data = json.dumps(data)
         message_send = str_data.encode()
         self.client.sendall(message_send)
+
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65431        # The port used by the server
