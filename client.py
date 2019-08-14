@@ -4,36 +4,29 @@
 import socket
 import json
 
-HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 65432        # The port used by the server
-
-def send_dict(dict_data):
-    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-        s.connect((HOST, PORT))
-        #dict_data = '{"x": 1, "y": 2}'
-        str_data = json.dumps(dict_data)
-        bin_data = str_data.encode()
-        s.sendall(bin_data)
-        data = s.recv(1024)
-        print('Received', repr(data))
-
-def send_command(method, args):
+def gen_message(method, args):
     data = dict()
     data["method"] = method
     data["args"] = args
-    send_dict(data)
+    str_data = json.dumps(data)
+    bin_data = str_data.encode()
+    return bin_data
 
-def put(pos):
+def get_put_message(pos):
     args = {'position': pos}
-    send_command("put", args)
+    return gen_message("put", args)
 
-def show():
+def get_show_message():
     args = {}
-    send_command("show", args)
+    return gen_message("show", args)
 
+HOST = '127.0.0.1'  # The server's hostname or IP address
+PORT = 65432        # The port used by the server
+client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+client.connect((HOST, PORT))
 
-put((1, 1))
-put((2, 1))
-show()
-
+message = get_put_message((1, 1))
+client.sendall(message)
+data_recv = client.recv(1024)
+print('Received', repr(data_recv))
 
