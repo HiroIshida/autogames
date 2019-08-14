@@ -5,9 +5,13 @@
 import socket
 import json
 
+
 class Player:
     def __init__(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        # reconnectable client
+        # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
+        self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.client.connect((host, port))
 
     def put(self, position):
