@@ -6,11 +6,9 @@ import socket
 import json
 
 class Player:
-    def __init__(self, player_name, host, port):
+    def __init__(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.client.connect((host, port))
-        self.player_name = player_name
-        self._set_new_player(player_name)
 
     def put(self, position):
         method = "put"
@@ -20,11 +18,6 @@ class Player:
     def show(self):
         method = "show"
         args = {}
-        self._send(method, args)
-
-    def _set_new_player(self, name):
-        method = "set_new_player"
-        args = {'name': name}
         self._send(method, args)
 
     def _send(self, method, args):
@@ -40,6 +33,7 @@ class Player:
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65432        # The port used by the server
 
-player = Player("ishida", HOST, PORT)
-player.put((1, 1))
+player = Player(HOST, PORT)
+player.put((2, 2))
+player.put((2, 1))
 

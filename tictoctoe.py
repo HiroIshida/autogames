@@ -7,11 +7,9 @@ class TictactoeGame:
         self.current_player_no = 0
 
     def set_new_player(self, player_address):
-        total_player_num = len(self.player_address_list)
-        if total_player_num == 2:
-            return (False, "we have already two people here, sorry")
+        print("new player is set")
         self.player_address_list.append(player_address)
-        return (True, "total player numbers is " + str(total_player_num + 1))
+        return (True, "total player numbers is " + str(len(self.player_address_list)))
 
     def put(self, player_address, position): 
         if eq_address(player_address, self.player_address_list[0]):
