@@ -5,10 +5,14 @@ python:
   - "3.6"
 
 install:
+  - pip install --upgrade pip setuptools wheel
   - pip install autopep8
+  - python setup.py develop
 
 script:
   # check python format
   - autopep8 -r . --diff --exit-code
+  # check if game works correctly
+  - python tictactoe/test/check_tictactoe.py
 
 sudo: false

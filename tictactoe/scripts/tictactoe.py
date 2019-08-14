@@ -73,12 +73,3 @@ def eq_address(ad1, ad2):
         if not ad1[i] == ad2[i]:
             return False
     return True
-
-
-if __name__ == '__main__':
-    game_field = TictactoeGame(3)
-    game_field.put((0, 1))
-    game_field.put((0, 2))
-    game_field.put((2, 2))
-    game_field.put((1, 2))
-    game_field.show()
