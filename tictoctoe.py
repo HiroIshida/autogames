@@ -1,4 +1,6 @@
 import json
+
+
 class TictactoeGame:
 
     def __init__(self, dim):
@@ -34,7 +36,7 @@ class TictactoeGame:
 
         # put a stone;
         self.field[x][y] = stone
-        self.current_player_no = (self.current_player_no + 1)%2
+        self.current_player_no = (self.current_player_no + 1) % 2
         return (True, self.get_pretty_gameboard())
 
     def get_field(self):
@@ -65,13 +67,15 @@ class TictactoeGame:
             for y in range(self.dim):
                 print("hoge")
 
+
 def eq_address(ad1, ad2):
     for i in range(2):
         if not ad1[i] == ad2[i]:
             return False
     return True
 
-if __name__=='__main__':
+
+if __name__ == '__main__':
     game_field = TictactoeGame(3)
     game_field.put((0, 1))
     game_field.put((0, 2))
