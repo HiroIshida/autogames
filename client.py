@@ -44,6 +44,9 @@ HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65431        # The port used by the server
 
 player = Player(HOST, PORT)
-player.put((2, 2))
-field = player.get_field()
 
+# Sample usage
+# Take one's turn
+# player.put((2, 2))
+# Get field data
+# field = player.get_field()

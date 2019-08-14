@@ -68,13 +68,13 @@ client_list = []
 while True:
     try:
         conn, addr = sock.accept()
-        print("hoge")
+        print("accept new socket")
+        print("[client address]=>{}".format(addr[0]))
+        print("[client port]=>{}".format(addr[1]))
     except KeyboardInterrupt:
         sock.close()
         exit()
         break
-    print("[client address]=>{}".format(addr[0]))
-    print("[client port]=>{}".format(addr[1]))
     if len(client_list) < 2:
         client_list.append((conn, addr))
         dispatch(addr, "set_new_player", {})
