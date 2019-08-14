@@ -1,6 +1,6 @@
 ## install
 ```
 git clone https://github.com/HiroIshida/tictoctoe.git
-cd tictactoe
+cd tictoctoe
 pip install --user .
 ```
