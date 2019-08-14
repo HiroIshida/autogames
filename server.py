@@ -11,6 +11,7 @@ from tictoctoe import TictactoeGame
 
 game_field = TictactoeGame(3)
 
+
 def dispatch(address_, method, args):
     # we will concatinate addresses and make a list of them later in
     # the method: TictactoGame.set_new_player. For this purpose, here, we convert
@@ -43,7 +44,7 @@ def loop_handler(connection, address):
             args = dict_data["args"]
             state = dispatch(address, method, args)
             message = state[1].encode()
-            conn.sendall(message)
+            connection.sendall(message)
         except IndexError:
             continue
         except KeyboardInterrupt:
@@ -77,7 +78,7 @@ while True:
     if len(client_list) < 2:
         client_list.append((conn, addr))
         dispatch(addr, "set_new_player", {})
-        thread = threading.Thread(target = loop_handler, args = (conn, addr))
+        thread = threading.Thread(target=loop_handler, args=(conn, addr))
         thread.start()
 
 sock.close()

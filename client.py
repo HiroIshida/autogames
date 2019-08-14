@@ -12,6 +12,7 @@ class Player:
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.client.settimeout(1)
         self.client.connect((host, port))
 
     def put(self, position):
@@ -30,7 +31,6 @@ class Player:
         json_data = json.loads(message_recieved)
         field = json_data["data"]
         return field
-
 
     def _send(self, method, args):
         data = dict()
