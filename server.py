@@ -45,6 +45,9 @@ def loop_handler(connection, address):
         conn.sendall(message)
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+# reconnectable client
+# https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
+sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 HOST = '127.0.0.1'
 PORT = 65431
 sock.bind((HOST, PORT))
