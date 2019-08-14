@@ -16,8 +16,10 @@ class TictactoeGame:
 
         # invalid operation
         if not self.field[x][y] == 0:
+            print("there is already a stone here")
             return False
         if x<0 or x >= self.dim or y < 0 or y>= self.dim:
+            print("out of the game field")
             return False
 
         # put a stone;  
