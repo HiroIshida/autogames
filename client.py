@@ -14,11 +14,19 @@ class Player:
         method = "put"
         args = {'position': position}
         self._send(method, args)
+        message_recieved = self.client.recv(1024)
+        print(message_recieved.decode())
 
-    def show(self):
-        method = "show"
+    def get_field(self):
+        method = "get_field"
         args = {}
         self._send(method, args)
+        message_recieved_ = self.client.recv(1024)
+        message_recieved = message_recieved_.decode()
+        json_data = json.loads(message_recieved)
+        field = json_data["data"]
+        return field
+
 
     def _send(self, method, args):
         data = dict()
@@ -27,13 +35,11 @@ class Player:
         str_data = json.dumps(data)
         message_send = str_data.encode()
         self.client.sendall(message_send)
-        message_recieved = self.client.recv(1024)
-        print(message_recieved.decode())
 
 HOST = '127.0.0.1'  # The server's hostname or IP address
-PORT = 65432        # The port used by the server
+PORT = 65431        # The port used by the server
 
 player = Player(HOST, PORT)
 player.put((2, 2))
-player.put((2, 1))
+field = player.get_field()
 

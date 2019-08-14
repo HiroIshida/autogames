@@ -1,3 +1,4 @@
+import json
 class TictactoeGame:
 
     def __init__(self, dim):
@@ -35,6 +36,12 @@ class TictactoeGame:
         self.field[x][y] = stone
         self.current_player_no = (self.current_player_no + 1)%2
         return (True, self.get_pretty_gameboard())
+
+    def get_field(self):
+        list_data = self.field
+        dict_data = {'data': list_data}
+        str_data = json.dumps(dict_data)
+        return (True, str_data)
 
     def get_pretty_gameboard(self):
         y_str_line = ""

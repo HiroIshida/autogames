@@ -24,8 +24,9 @@ def dispatch(address_, method, args):
     if method == "put":
         state = game_field.put(address, args["position"])
 
-    if method == "show":
-        state = game_field.show()
+    if method == "get_field":
+        state = game_field.get_field()
+
     return state
 
 
@@ -45,7 +46,7 @@ def loop_handler(connection, address):
 
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 HOST = '127.0.0.1'
-PORT = 65432
+PORT = 65431
 sock.bind((HOST, PORT))
 sock.listen(2)
 
