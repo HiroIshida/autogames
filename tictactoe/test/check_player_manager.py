@@ -51,5 +51,6 @@ def test_whos_turn_and_go_next_turn():
 def test_initialize():  # TODO
     pass
 
+
 test_add_player()
 test_whos_turn_and_go_next_turn()

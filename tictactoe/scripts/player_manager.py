@@ -10,7 +10,8 @@ class PlayerManager:
         self.player_address_list = []
 
     def add_player(self, player_address):
-        isAlreadySet = sum([player_address == a for a in self.player_address_list]) > 0
+        isAlreadySet = sum(
+            [player_address == a for a in self.player_address_list]) > 0
         if isAlreadySet:
             return (False, "add_player: you are already in the game")
 
