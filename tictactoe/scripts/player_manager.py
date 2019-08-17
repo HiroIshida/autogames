@@ -4,7 +4,6 @@ class PlayerManager:
         self.N_player = N_player
         self.stone_list = stone_list
         self.player_address_list = []
-        #self.current_player_address = None # will be set only after all players enter the game field; see add_player
         self.counter = 0
 
     def initialize(self):
@@ -31,8 +30,6 @@ class PlayerManager:
         if not self._isGameStart():
             return (False, "go_next_turn: the game hasn't started yet")
         self.counter += 1
-        return 
 
     def _isGameStart(self):
         return len(self.player_address_list) == self.N_player
-

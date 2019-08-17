@@ -1,6 +1,7 @@
 import json
 from player_manager import PlayerManager
 
+
 class TictactoeGame:
 
     def __init__(self, dim):
