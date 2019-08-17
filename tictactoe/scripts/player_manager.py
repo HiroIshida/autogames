@@ -1,8 +1,8 @@
 class PlayerManager:
 
-    def __init__(self, N_player):
-        print("hoge")
+    def __init__(self, N_player, stone_list):
         self.N_player = N_player
+        self.stone_list = stone_list
         self.player_address_list = []
         #self.current_player_address = None # will be set only after all players enter the game field; see add_player
         self.counter = 0
@@ -21,12 +21,11 @@ class PlayerManager:
         self.player_address_list.append(player_address)
 
     def whos_turn(self):
-        print("hoge")
         if not self._isGameStart():
             return (False, "whos_turn: the game hasn't started yet")
         n = self.counter % self.N_player
         address = self.player_address_list[n]
-        return address
+        return address, self.stone_list[n]
 
     def go_next_turn(self):
         if not self._isGameStart():
