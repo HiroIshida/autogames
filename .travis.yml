@@ -14,5 +14,7 @@ script:
   - autopep8 -r . --diff --exit-code
   # check if game works correctly
   - python tictactoe/test/check_tictactoe.py
+  # check if player_manager works correctly
+  - python tictactoe/test/check_player_manager.py
 
 sudo: false
