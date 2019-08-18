@@ -10,6 +10,7 @@ class PlayerManager:
         self.player_address_list = []
 
     def add_player(self, player_address):
+        print("new player is set")
         isAlreadySet = sum(
             [player_address == a for a in self.player_address_list]) > 0
         if isAlreadySet:
@@ -19,6 +20,7 @@ class PlayerManager:
             return (False, "add_player: you can't join the game")
 
         self.player_address_list.append(player_address)
+        return (True, "")
 
     def whos_turn(self):
         if not self._isGameStart():
