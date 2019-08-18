@@ -8,7 +8,7 @@ import socket
 import json
 
 
-class Player:
+class Client:
 
     def __init__(self, host, port):
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -47,7 +47,7 @@ class Player:
 HOST = '127.0.0.1'  # The server's hostname or IP address
 PORT = 65431        # The port used by the server
 
-player = Player(HOST, PORT)
+player = Client(HOST, PORT)
 
 # Sample usage
 # Take one's turn
