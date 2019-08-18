@@ -40,9 +40,8 @@ class TictactoeGame:
         # check checkmate
         result = self._check_checkmate(stone, x, y)
         isGameEnd = result[0]
-        message = result[1] + "\n" + self.get_pretty_gameboard ()
+        message = result[1] + "\n" + self.get_pretty_gameboard()
         return (not isGameEnd, message)
-
 
     def get_field(self):
         list_data = self.field
@@ -68,16 +67,16 @@ class TictactoeGame:
         return y_str_line
 
     def _check_checkmate(self, stone, x, y):
-        # check checkmate in a sequential (NOT batch) manner 
+        # check checkmate in a sequential (NOT batch) manner
         # by calling only when players put a stone.
 
         message_win = "you win"
         message_draw = "draw"
         message_inprogress = ""
-        
+
         # check horizontal (x)
         sum_x = 0
-        for i in range(self.dim): 
+        for i in range(self.dim):
             sum_x += self.field[x][i]
         if sum_x == stone * 3:
             return (True, message_win)
@@ -89,7 +88,7 @@ class TictactoeGame:
         if sum_y == stone * 3:
             return (True, message_win)
 
-        # check diagonal 
+        # check diagonal
         sum_diag = 0
         for i in range(self.dim):
             sum_diag += self.field[i][i]
@@ -103,6 +102,7 @@ class TictactoeGame:
             return (True, message_draw)
 
         return (False, message_inprogress)
+
 
 def eq_address(ad1, ad2):
     for i in range(2):
