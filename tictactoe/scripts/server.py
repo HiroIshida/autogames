@@ -8,6 +8,7 @@ from __future__ import absolute_import
 
 import socket
 import json
+import os
 import threading
 from tictactoe_game import TictactoeGame
 
@@ -55,10 +56,13 @@ class Server:
                 state = self.dispatch(address, method, args)
                 message = state[1].encode()
                 connection.sendall(message)
+                if state[0] is False:
+                    self.sock.close()
+                    os._exit(0)
+                    break
             except KeyboardInterrupt:
                 print("Exit from main program")
                 self.sock.close()
-                import os
                 os._exit(1)
                 break
 

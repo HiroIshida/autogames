@@ -24,18 +24,19 @@ class TictactoeGame:
 
         # invalid operation
         if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
-            return (False, "out of the game field")
+            return (True, "out of the game field")
         if not self.field[x][y] == 0:
-            return (False, "there is already a stone here")
+            return (True, "there is already a stone here")
 
         current_turn_address, stone = self.pm.whos_turn()
         if not player_address == current_turn_address:
-            return (False, "please wait for your opponent finish the turn")
+            return (True, "please wait for your opponent finish the turn")
 
         # put a stone;
         self.field[x][y] = stone
         self.pm.go_next_turn()
-        return (True, self.get_pretty_gameboard())
+
+        return (not self._check_checkmate(), self.get_pretty_gameboard())
 
     def get_field(self):
         list_data = self.field
@@ -61,9 +62,11 @@ class TictactoeGame:
         return y_str_line
 
     def _check_checkmate(self):
-        for x in range(self.dim):
-            for y in range(self.dim):
-                print("hoge")
+        # TODO: ishida-san ganbatte
+        # NOW: check only whether the field is full or not
+        field_flatten = sum(self.field, [])
+        is_field_full = all(elem != 0 for elem in field_flatten)
+        return is_field_full
 
 
 def eq_address(ad1, ad2):

@@ -16,5 +16,7 @@ script:
   - python tictactoe/test/check_tictactoe.py
   # check if player_manager works correctly
   - python tictactoe/test/check_player_manager.py
+  # check if server and client works correctly
+  - ./tictactoe/test/check_server_and_client.sh
 
 sudo: false
