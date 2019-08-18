@@ -40,8 +40,8 @@ class TictactoeGame:
         # check checkmate
         result = self._check_checkmate(stone, x, y)
         isGameEnd = result[0]
-        message = result[1]
-        return (not isGameEnd, self.get_pretty_gameboard())
+        message = result[1] + "\n" + self.get_pretty_gameboard ()
+        return (not isGameEnd, message)
 
 
     def get_field(self):
