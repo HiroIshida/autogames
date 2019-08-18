@@ -77,9 +77,10 @@ class Server:
                 self.sock.close()
                 exit()
                 break
-            if len(self.client_list) < 2:
+            state = self.dispatch(addr, "set_new_player", {})
+            isNewPlayerAccepted = state[0]
+            if isNewPlayerAccepted:
                 self.client_list.append((conn, addr))
-                self.dispatch(addr, "set_new_player", {})
                 thread = threading.Thread(
                     target=self.loop_handler, args=(conn, addr))
                 thread.start()

@@ -16,8 +16,8 @@ class TictactoeGame:
         self.isGameFinish = False
 
     def set_new_player(self, player_address):
-        self.pm.add_player(player_address)
-        print("new player is set")
+        state = self.pm.add_player(player_address)
+        return state
 
     def put(self, player_address, position):
         x = position[0]
