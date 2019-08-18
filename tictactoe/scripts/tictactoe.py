@@ -1,5 +1,5 @@
 import json
-from player_manager import PlayerManager
+from tictactoe.scripts.player_manager import PlayerManager
 
 
 class TictactoeGame:
