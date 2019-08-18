@@ -1,4 +1,8 @@
+# for python2 to use absolute path (python3 uses absolute path by default)
+from __future__ import absolute_import
+
 import json
+from tictactoe.scripts.player_manager import PlayerManager
 
 
 class TictactoeGame:
@@ -6,13 +10,13 @@ class TictactoeGame:
     def __init__(self, dim):
         self.dim = dim
         self.field = [[0 for x in range(dim)] for y in range(dim)]
-        self.player_address_list = []
-        self.current_player_no = 0
+        N_player = 2
+        stone_list = [1, -1]
+        self.pm = PlayerManager(N_player, stone_list)
 
     def set_new_player(self, player_address):
+        self.pm.add_player(player_address)
         print("new player is set")
-        self.player_address_list.append(player_address)
-        return (True, "total player numbers is " + str(len(self.player_address_list)))
 
     def put(self, player_address, position):
         x = position[0]
@@ -24,19 +28,13 @@ class TictactoeGame:
         if not self.field[x][y] == 0:
             return (False, "there is already a stone here")
 
-        if eq_address(player_address, self.player_address_list[0]):
-            player_no = 0
-        else:
-            player_no = 1
-
-        if not player_no == self.current_player_no:
+        current_turn_address, stone = self.pm.whos_turn()
+        if not player_address == current_turn_address:
             return (False, "please wait for your opponent finish the turn")
-
-        stone = -1 if player_no == 0 else 1
 
         # put a stone;
         self.field[x][y] = stone
-        self.current_player_no = (self.current_player_no + 1) % 2
+        self.pm.go_next_turn()
         return (True, self.get_pretty_gameboard())
 
     def get_field(self):
