@@ -76,7 +76,8 @@ class Server:
             if len(self.client_list) < 2:
                 self.client_list.append((conn, addr))
                 self.dispatch(addr, "set_new_player", {})
-                thread = threading.Thread(target=self.loop_handler, args=(conn, addr))
+                thread = threading.Thread(
+                    target=self.loop_handler, args=(conn, addr))
                 thread.start()
         self.sock.close()
 
