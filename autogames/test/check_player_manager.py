@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from tictactoe.scripts.player_manager import PlayerManager
+from autogames.scripts.player_manager import PlayerManager
 
 player0 = ('1271,0.0.1', 00000)  # dummy address and port
 player1 = ('1271,0.0.1', 11111)  # dummy address and port

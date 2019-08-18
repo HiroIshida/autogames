@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 __version__ = '0.0.1'
 
 setup(
-    name='tictactoe',
+    name='autogames',
     version=__version__,
     packages=find_packages(),
     description="server and client programs for tictactoe",
