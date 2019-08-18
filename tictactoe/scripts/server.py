@@ -3,10 +3,13 @@
 # as for making a server for multiple clients, see:
 # https://qiita.com/1000VICKY/items/2338852a41c6aaf8efbb#4%E3%82%AF%E3%83%A9%E3%82%A4%E3%82%A2%E3%83%B3%E3%83%88%E5%81%B4%E3%81%AE%E5%8F%97%E4%BF%A1%E3%82%92%E5%88%A5%E3%82%B9%E3%83%AC%E3%83%83%E3%83%89%E3%81%AB%E5%88%86%E9%9B%A2
 
+# for python2 to use absolute path (python3 uses absolute path by default)
+from __future__ import absolute_import
+
 import socket
 import json
 import threading
-from tictactoe import TictactoeGame
+from tictactoe.scripts.tictactoe import TictactoeGame
 
 game_field = TictactoeGame(3)
 

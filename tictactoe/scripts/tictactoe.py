@@ -1,3 +1,6 @@
+# for python2 to use absolute path (python3 uses absolute path by default)
+from __future__ import absolute_import
+
 import json
 from tictactoe.scripts.player_manager import PlayerManager
 
