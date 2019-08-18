@@ -1,7 +1,7 @@
 import pkg_resources
 
 __version__ = pkg_resources.get_distribution(
-    'tictactoe').version
+    'autogames').version
 
 
-from tictactoe import scripts  # NOQA
+from autogames import scripts  # NOQA
