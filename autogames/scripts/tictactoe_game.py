@@ -13,6 +13,7 @@ class TictactoeGame:
         N_player = 2
         stone_list = [1, -1]
         self.pm = PlayerManager(N_player, stone_list)
+        self.isGameFinish = False
 
     def set_new_player(self, player_address):
         self.pm.add_player(player_address)
@@ -36,7 +37,11 @@ class TictactoeGame:
         self.field[x][y] = stone
         self.pm.go_next_turn()
 
-        return (not self._check_checkmate(), self.get_pretty_gameboard())
+        # check checkmate
+        result = self._check_checkmate(stone, x, y)
+        isGameEnd = result[0]
+        message = result[1] + "\n" + self.get_pretty_gameboard()
+        return (not isGameEnd, message)
 
     def get_field(self):
         list_data = self.field
@@ -61,12 +66,42 @@ class TictactoeGame:
             y_str_line += (x_str_line + "\n")
         return y_str_line
 
-    def _check_checkmate(self):
-        # TODO: ishida-san ganbatte
-        # NOW: check only whether the field is full or not
+    def _check_checkmate(self, stone, x, y):
+        # check checkmate in a sequential (NOT batch) manner
+        # by calling only when players put a stone.
+
+        message_win = "you win"
+        message_draw = "draw"
+        message_inprogress = ""
+
+        # check horizontal (x)
+        sum_x = 0
+        for i in range(self.dim):
+            sum_x += self.field[x][i]
+        if sum_x == stone * 3:
+            return (True, message_win)
+
+        # check vertical (y)
+        sum_y = 0
+        for i in range(self.dim):
+            sum_y += self.field[i][y]
+        if sum_y == stone * 3:
+            return (True, message_win)
+
+        # check diagonal
+        sum_diag = 0
+        for i in range(self.dim):
+            sum_diag += self.field[i][i]
+        if sum_diag == stone * 3:
+            return (True, message_win)
+
+        # check whether the field is full or not
         field_flatten = sum(self.field, [])
         is_field_full = all(elem != 0 for elem in field_flatten)
-        return is_field_full
+        if is_field_full:
+            return (True, message_draw)
+
+        return (False, message_inprogress)
 
 
 def eq_address(ad1, ad2):
