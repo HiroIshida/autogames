@@ -8,14 +8,10 @@ from autogames.scripts.games.game_manager import GameManager
 class TictactoeGame(GameManager, object):
 
     def __init__(self, dim):
-        super(TictactoeGame, self).__init__(2, [1, -1])  # N_player, stone_list
+        super(TictactoeGame, self).__init__(2, [1, -1])  # N_player, player_numbers (stone_list)
         self.dim = dim
         self.field = [[0 for x in range(dim)] for y in range(dim)]
         self.isGameFinish = False
-
-    def set_new_player(self, player_address):
-        state = self.add_player(player_address)
-        return state
 
     def put(self, player_address, position):
         x = position[0]
@@ -100,10 +96,3 @@ class TictactoeGame(GameManager, object):
             return (True, message_draw)
 
         return (False, message_inprogress)
-
-
-def eq_address(ad1, ad2):
-    for i in range(2):
-        if not ad1[i] == ad2[i]:
-            return False
-    return True

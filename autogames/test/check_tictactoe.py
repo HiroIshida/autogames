@@ -8,8 +8,8 @@ player2 = ('127,0.0.1', 23456)  # dummy address and port
 players = [player1, player2]
 
 game_field = TictactoeGame(3)
-game_field.set_new_player(player1)
-game_field.set_new_player(player2)
+game_field.add_player(player1)
+game_field.add_player(player2)
 
 count = 0
 for i in range(3):

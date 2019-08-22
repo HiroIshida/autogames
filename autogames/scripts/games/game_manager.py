@@ -1,8 +1,8 @@
 class GameManager:
 
-    def __init__(self, N_player, stone_list):
+    def __init__(self, N_player, player_numbers):
         self.N_player = N_player
-        self.stone_list = stone_list
+        self.player_numbers = player_numbers
         self.player_address_list = []
         self.counter = 0
 
@@ -27,7 +27,7 @@ class GameManager:
             return (False, "whos_turn: the game hasn't started yet")
         n = self.counter % self.N_player
         address = self.player_address_list[n]
-        return address, self.stone_list[n]
+        return address, self.player_numbers[n]
 
     def go_next_turn(self):
         if not self._isGameStart():
@@ -36,3 +36,16 @@ class GameManager:
 
     def _isGameStart(self):
         return len(self.player_address_list) == self.N_player
+
+    # methods which must be override in child classes
+    @abstractmethod
+    def put(self, player_address, position):
+        pass
+
+    @abstractmethod
+    def get_field(self):
+        pass
+
+    @abstractmethod
+    def check_checkmate_field(self, stone, x, y):
+        pass
