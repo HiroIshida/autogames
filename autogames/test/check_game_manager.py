@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from autogames.scripts.player_manager import PlayerManager
+from autogames.scripts.games.game_manager import GameManager
 
 player0 = ('1271,0.0.1', 00000)  # dummy address and port
 player1 = ('1271,0.0.1', 11111)  # dummy address and port
@@ -19,32 +19,32 @@ def eq_address(ad1, ad2):  # TODO: must be in utils
 
 
 def test_add_player():
-    pm = PlayerManager(N_player, stone_list)
+    gm = GameManager(N_player, stone_list)
     for n in range(N_player):
-        pm.add_player(player_list[n])
+        gm.add_player(player_list[n])
 
     # test exceptional cases
-    assert not pm.add_player(player_list[0])[0]
-    assert not pm.add_player(player_list[N_player])[0]
+    assert not gm.add_player(player_list[0])[0]
+    assert not gm.add_player(player_list[N_player])[0]
 
 
 def test_whos_turn_and_go_next_turn():
-    pm = PlayerManager(N_player, stone_list)
+    gm = GameManager(N_player, stone_list)
     for n in range(N_player):
-        pm.add_player(player_list[n])
+        gm.add_player(player_list[n])
 
     # check turn 0
-    address, stone = pm.whos_turn()
+    address, stone = gm.whos_turn()
     assert eq_address(address, player0)
 
     # check turn 1
-    pm.go_next_turn()
-    address, stone = pm.whos_turn()
+    gm.go_next_turn()
+    address, stone = gm.whos_turn()
     assert eq_address(address, player1)
 
     # check turn 2
-    pm.go_next_turn()
-    address, stone = pm.whos_turn()
+    gm.go_next_turn()
+    address, stone = gm.whos_turn()
     assert eq_address(address, player2)
 
 

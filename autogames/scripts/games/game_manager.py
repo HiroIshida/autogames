@@ -1,4 +1,4 @@
-class PlayerManager:
+class GameManager:
 
     def __init__(self, N_player, stone_list):
         self.N_player = N_player

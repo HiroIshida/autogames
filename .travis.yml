@@ -15,7 +15,7 @@ script:
   # check if game works correctly
   - python autogames/test/check_tictactoe.py
   # check if player_manager works correctly
-  - python autogames/test/check_player_manager.py
+  - python autogames/test/check_game_manager.py
   # check if server and client works correctly
   - ./autogames/test/check_server_and_client.sh
 
