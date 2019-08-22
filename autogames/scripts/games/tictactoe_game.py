@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 
 import json
-from games.game_manager import GameManager
+from autogames.scripts.games.game_manager import GameManager
 
 
 class TictactoeGame(GameManager, object):
