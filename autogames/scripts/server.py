@@ -6,6 +6,8 @@
 # for python2 to use absolute path (python3 uses absolute path by default)
 from __future__ import absolute_import
 
+import argparse
+import glob
 import socket
 import json
 import os
@@ -15,8 +17,12 @@ from games.tictactoe_game import TictactoeGame
 
 class Server:
 
-    def __init__(self):
-        self.game_field = TictactoeGame(3)
+    def __init__(self, game_title):
+        # you can see available game list by command below
+        # python server.py --list-games or python server.py -l
+        game_instances = {'tictactoe_game': TictactoeGame(3)}
+
+        self.game_field = game_instances[game_title]
         self.client_list = []
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
@@ -88,5 +94,31 @@ class Server:
 
 
 if __name__ == "__main__":
-    server = Server()
+    # pick up available game titles from scripts/games
+    game_titles = []
+    file_names = glob.glob(os.path.join(os.getcwd(), 'games/*'))
+    for file_name in file_names:
+        file_name = os.path.basename(file_name)
+        # pick up only python files
+        if file_name.endswith('.py') and \
+           file_name != '__init__.py' and \
+           file_name != 'game_manager.py':
+            game_titles.append(os.path.splitext(file_name)[0])
+
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description='description of server.py')
+    parser.add_argument('-g', '--game', choices=game_titles,
+                        help='set game title which you want to play')
+    parser.add_argument('-l', '--list-games', action='store_true',
+                        help='show all game titles which you can play')
+    args = parser.parse_args()
+
+    # show all game titles
+    if args.list_games is True:
+        print('you must choose game title from below:')
+        print(game_titles)
+        exit()
+
+    # start game server
+    server = Server(args.game)
     server.main()
