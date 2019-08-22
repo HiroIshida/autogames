@@ -10,7 +10,7 @@ import socket
 import json
 import os
 import threading
-from tictactoe_game import TictactoeGame
+from games.tictactoe_game import TictactoeGame
 
 
 class Server:

@@ -1,10 +1,15 @@
 #!/bin/bash
 
-SCRIPT_DIR=$(dirname $0)
+HERE=$(pwd)
 
-$SCRIPT_DIR/../scripts/server.py &
+SCRIPT_DIR=$(dirname $0)/../scripts
+cd $SCRIPT_DIR
+
+./server.py &
 sleep 1
-$SCRIPT_DIR/../scripts/client.py &
+./client.py &
 sleep 1
-$SCRIPT_DIR/../scripts/client.py &
+./client.py &
 sleep 1
+
+cd $HERE

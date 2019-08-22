@@ -2,21 +2,19 @@
 from __future__ import absolute_import
 
 import json
-from autogames.scripts.player_manager import PlayerManager
+from games.game_manager import GameManager
 
 
-class TictactoeGame:
+class TictactoeGame(GameManager, object):
 
     def __init__(self, dim):
+        super(TictactoeGame, self).__init__(2, [1, -1])  # N_player, stone_list
         self.dim = dim
         self.field = [[0 for x in range(dim)] for y in range(dim)]
-        N_player = 2
-        stone_list = [1, -1]
-        self.pm = PlayerManager(N_player, stone_list)
         self.isGameFinish = False
 
     def set_new_player(self, player_address):
-        state = self.pm.add_player(player_address)
+        state = self.add_player(player_address)
         return state
 
     def put(self, player_address, position):
@@ -29,13 +27,13 @@ class TictactoeGame:
         if not self.field[x][y] == 0:
             return (True, "there is already a stone here")
 
-        current_turn_address, stone = self.pm.whos_turn()
+        current_turn_address, stone = self.whos_turn()
         if not player_address == current_turn_address:
             return (True, "please wait for your opponent finish the turn")
 
         # put a stone;
         self.field[x][y] = stone
-        self.pm.go_next_turn()
+        self.go_next_turn()
 
         # check checkmate
         result = self._check_checkmate(stone, x, y)

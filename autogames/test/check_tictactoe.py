@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from autogames.scripts.tictactoe_game import TictactoeGame
+from autogames.scripts.games.tictactoe_game import TictactoeGame
 
 
 player1 = ('127,0.0.1', 12345)  # dummy address and port
