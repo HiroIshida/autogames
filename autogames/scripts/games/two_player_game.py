@@ -1,10 +1,11 @@
-class PlayerManager:
+class TwoPlayerGame:
 
-    def __init__(self, N_player, stone_list):
-        self.N_player = N_player
-        self.stone_list = stone_list
+    def __init__(self):
+        self.state = None
         self.player_address_list = []
+        self.stone_list = [1, -1]
         self.counter = 0
+        self.N_player = 2
 
     def initialize(self):
         self.player_address_list = []
@@ -36,3 +37,6 @@ class PlayerManager:
 
     def _isGameStart(self):
         return len(self.player_address_list) == self.N_player
+
+    def get_state(self):
+        self.state
