@@ -3,6 +3,7 @@ from __future__ import absolute_import
 
 import json
 from autogames.scripts.games.game_manager import GameManager
+import random
 
 
 class TictactoeGame(GameManager, object):
@@ -132,3 +133,8 @@ class TictactoeGame(GameManager, object):
                 if self.field[i][j] == 0:
                     available_positions.append([i, j])
         return available_positions
+
+    # Function for your original algorithm
+    # Think next position to win the game
+    def think(self):
+        return (random.randint(0, 2), random.randint(0, 2))
