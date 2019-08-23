@@ -2,11 +2,15 @@
 
 import glob
 import os
+import autogames
 
 
 def get_game_titles():
     game_titles = []
-    file_names = glob.glob(os.path.join(os.getcwd(), 'games/*'))
+    package_path = autogames.__file__
+    games_path = os.path.join(
+        os.path.dirname(package_path), 'scripts', 'games') + '/*'
+    file_names = glob.glob(games_path)
     for file_name in file_names:
         file_name = os.path.basename(file_name)
         # pick up only python files

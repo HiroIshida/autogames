@@ -13,4 +13,9 @@ setup(
     author_email='h-ishida@jsk.imi.i.u-tokyo.ac.jp',
     license='MIT',
     install_requires=open('requirements.txt').readlines(),
+    entry_points={'console_scripts':
+                  ['autogames_server='
+                   'autogames.scripts.server:main',
+                   'autogames_client='
+                   'autogames.scripts.client:main']},
 )
