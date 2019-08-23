@@ -137,4 +137,5 @@ class TictactoeGame(GameManager, object):
     # Function for your original algorithm
     # Think next position to win the game
     def think(self):
-        return (random.randint(0, 2), random.randint(0, 2))
+        print(random.choice(self.available_positions()))
+        return random.choice(self.available_positions())
