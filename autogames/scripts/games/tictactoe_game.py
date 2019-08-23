@@ -109,6 +109,6 @@ class TictactoeGame(GameManager, object):
             for j in range(self.dim):
                 # invalid operation
                 if self.field[i][j] != 0:
-                   break
+                    break
                 available_positions.append([i, j])
         return available_positions
