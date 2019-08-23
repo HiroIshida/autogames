@@ -14,14 +14,15 @@ class TictactoeGame(GameManager, object):
         self.isGameFinish = False
 
     def put(self, player_number, position):
+        # return from this method if invalid operation is executed
         x = position[0]
         y = position[1]
-
-        # invalid operation
-        if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
-            return (True, "out of the game field")
-        if not self.field[x][y] == 0:
-            return (True, "there is already a stone here")
+        if not position in self.available_positions():
+            if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
+                print("out of the game field")
+            else:
+                print("there is already a stone here")
+            return(True, 'Invalid operation !')
 
         current_turn_player = self.whos_turn()
         if current_turn_player == 1:
@@ -101,3 +102,13 @@ class TictactoeGame(GameManager, object):
             return (True, message_draw)
 
         return (False, message_inprogress)
+
+    def available_positions(self):
+        available_positions = []
+        for i in range(self.dim):
+            for j in range(self.dim):
+                # invalid operation
+                if self.field[i][j] != 0:
+                   break
+                available_positions.append([i, j])
+        return available_positions
