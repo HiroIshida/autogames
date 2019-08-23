@@ -35,12 +35,12 @@ class Server:
 
     def dispatch(self, address_, method, args):
         # we will concatinate addresses and make a list of them later in
-        # the method: TictactoGame.set_new_player. For this purpose, here, we convert
+        # the method: TictactoGame.add_player. For this purpose, here, we convert
         # address_ (list) -> address (tuple)
 
         address = (address_[0], address_[1])
-        if method == "set_new_player":
-            state = self.game_field.set_new_player(address)
+        if method == "add_player":
+            state = self.game_field.add_player()
         if method == "put":
             state = self.game_field.put(address, args["position"])
         if method == "get_field":
@@ -83,7 +83,7 @@ class Server:
                 self.sock.close()
                 exit()
                 break
-            state = self.dispatch(addr, "set_new_player", {})
+            state = self.dispatch(addr, "add_player", {})
             isNewPlayerAccepted = state[0]
             if isNewPlayerAccepted:
                 self.client_list.append((conn, addr))
