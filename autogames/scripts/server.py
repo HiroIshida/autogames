@@ -40,7 +40,7 @@ class Server:
 
         address = (address_[0], address_[1])
         if method == "add_player":
-            state = self.game_field.add_player(address)
+            state = self.game_field.add_player()
         if method == "put":
             state = self.game_field.put(address, args["position"])
         if method == "get_field":

@@ -8,12 +8,12 @@ from autogames.scripts.games.game_manager import GameManager
 class TictactoeGame(GameManager, object):
 
     def __init__(self, dim):
-        super(TictactoeGame, self).__init__(2, [1, -1])  # N_player, player_numbers (stone_list)
+        super(TictactoeGame, self).__init__(2)  # 2 player game
         self.dim = dim
         self.field = [[0 for x in range(dim)] for y in range(dim)]
         self.isGameFinish = False
 
-    def put(self, player_address, position):
+    def put(self, player_number, position):
         x = position[0]
         y = position[1]
 
@@ -23,8 +23,13 @@ class TictactoeGame(GameManager, object):
         if not self.field[x][y] == 0:
             return (True, "there is already a stone here")
 
-        current_turn_address, stone = self.whos_turn()
-        if not player_address == current_turn_address:
+        current_turn_player, player_number = self.whos_turn()
+        if player_number == 1:
+            stone = 1
+        elif player_number == 2:
+            stone = -1
+
+        if not player_number == current_turn_player:
             return (True, "please wait for your opponent finish the turn")
 
         # put a stone;

@@ -19,33 +19,34 @@ def eq_address(ad1, ad2):  # TODO: must be in utils
 
 
 def test_add_player():
-    gm = GameManager(N_player, stone_list)
+    print("test_add_player")
+    gm = GameManager(N_player)
     for n in range(N_player):
-        gm.add_player(player_list[n])
+        gm.add_player()
 
     # test exceptional cases
-    assert not gm.add_player(player_list[0])[0]
-    assert not gm.add_player(player_list[N_player])[0]
+    assert not gm.add_player()[0]
 
 
 def test_whos_turn_and_go_next_turn():
-    gm = GameManager(N_player, stone_list)
+    print("test_whos_turn_and_go_next_turn")
+    gm = GameManager(N_player)
     for n in range(N_player):
-        gm.add_player(player_list[n])
-
-    # check turn 0
-    address, stone = gm.whos_turn()
-    assert eq_address(address, player0)
+        gm.add_player()
 
     # check turn 1
-    gm.go_next_turn()
-    address, stone = gm.whos_turn()
-    assert eq_address(address, player1)
+    number, number_ = gm.whos_turn()
+    assert number == 1
 
     # check turn 2
     gm.go_next_turn()
-    address, stone = gm.whos_turn()
-    assert eq_address(address, player2)
+    number, number_ = gm.whos_turn()
+    assert number == 2
+
+    # check turn 3
+    gm.go_next_turn()
+    number, number_ = gm.whos_turn()
+    assert number == 3
 
 
 def test_initialize():  # TODO
