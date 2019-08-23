@@ -50,13 +50,13 @@ class TictactoeGame(GameManager, object):
             self.go_next_turn()
         return (not isGameEnd, message)
 
-    def field_to_string(self):
+    def field_to_json(self):
         list_data = self.field
         dict_data = {'data': list_data}
         str_data = json.dumps(dict_data)
         return str_data
 
-    def get_pretty_gameboard(self):
+    def show_field(self):
         y_str_line = ""
         for y in range(self.dim):
             x_str_line = "|"
@@ -137,5 +137,4 @@ class TictactoeGame(GameManager, object):
     # Function for your original algorithm
     # Think next position to win the game
     def think(self):
-        print(random.choice(self.available_positions()))
         return random.choice(self.available_positions())

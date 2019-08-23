@@ -79,4 +79,4 @@ if __name__ == '__main__':
         exit()
 
     client = Client(args.game)
-    client.joint_game()
+    client.join_game()

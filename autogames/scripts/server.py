@@ -50,7 +50,7 @@ class Server:
             time.sleep(0.01)
 
     def call_next_player(self, connection):
-        message = self.game_field.field_to_string().encode()
+        message = self.game_field.field_to_json().encode()
         connection.sendall(message)
 
     def next_move_from_player(self, connection, player_number):
@@ -70,11 +70,11 @@ class Server:
             # receive input from client
             current_state = self.next_move_from_player(
                 connection, player_number)
-            print(self.game_field.get_pretty_gameboard())
+            print(self.game_field.show_field())
             # Game is end
             if current_state[0] is False:
                 print(current_state[1])
-                print(self.game_field.get_pretty_gameboard())
+                print(self.game_field.show_field())
                 self.sock.close()
                 os._exit(0)
                 break
