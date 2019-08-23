@@ -4,16 +4,24 @@
 # for python2 to use absolute path (python3 uses absolute path by default)
 from __future__ import absolute_import
 
+import argparse
 import os
 import random
 import socket
 import time
 import json
+from games.tictactoe_game import TictactoeGame
+from games import get_game_titles
 
 
 class Client:
 
-    def __init__(self):
+    def __init__(self, game_title):
+        # you can see available game list by command below
+        # python client.py --list-games or python client.py -l
+        game_instances = {'tictactoe_game': TictactoeGame(3)}
+        self.game_field = game_instances[game_title]
+
         self.host = '127.0.0.1'  # The server's hostname or IP address
         self.port = 65431        # The port used by the server
         self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -65,5 +73,22 @@ class Client:
 
 
 if __name__ == '__main__':
-    client = Client()
+    # pick up available game titles from scripts/games
+    game_titles = get_game_titles()
+
+    # parse command line arguments
+    parser = argparse.ArgumentParser(description='description of server.py')
+    parser.add_argument('-g', '--game', choices=game_titles,
+                        help='set game title which you want to play')
+    parser.add_argument('-l', '--list-games', action='store_true',
+                        help='show all game titles which you can play')
+    args = parser.parse_args()
+
+    # show all game titles
+    if args.list_games is True:
+        print('you must choose game title from below:')
+        print(game_titles)
+        exit()
+
+    client = Client(args.game)
     client.main()

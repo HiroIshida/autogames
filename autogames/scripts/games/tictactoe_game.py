@@ -22,6 +22,8 @@ class TictactoeGame(GameManager, object):
                 print("out of the game field")
             else:
                 print("there is already a stone here")
+                print(self.available_positions())
+                print(position)
             return(True, 'Invalid operation !')
 
         current_turn_player = self.whos_turn()
@@ -108,7 +110,6 @@ class TictactoeGame(GameManager, object):
         for i in range(self.dim):
             for j in range(self.dim):
                 # invalid operation
-                if self.field[i][j] != 0:
-                    break
-                available_positions.append([i, j])
+                if self.field[i][j] == 0:
+                    available_positions.append([i, j])
         return available_positions
