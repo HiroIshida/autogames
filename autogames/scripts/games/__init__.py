@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -
 
+import autogames
 import glob
 import os
-import autogames
 
 
 def get_game_titles():

@@ -5,12 +5,12 @@
 from __future__ import absolute_import
 
 import argparse
+from autogames.scripts.games import get_game_titles
+from autogames.scripts.games.tictactoe_game import TictactoeGame
+import json
 import os
 import socket
 import time
-import json
-from autogames.scripts.games.tictactoe_game import TictactoeGame
-from autogames.scripts.games import get_game_titles
 
 
 class Client:

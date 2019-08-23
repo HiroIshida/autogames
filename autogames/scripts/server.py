@@ -8,12 +8,12 @@ from __future__ import absolute_import
 
 import argparse
 from autogames.scripts.games import get_game_titles
-import socket
+from autogames.scripts.games.tictactoe_game import TictactoeGame
 import json
 import os
+import socket
 import threading
 import time
-from autogames.scripts.games.tictactoe_game import TictactoeGame
 
 
 class Server:
