@@ -1,8 +1,8 @@
 # for python2 to use absolute path (python3 uses absolute path by default)
 from __future__ import absolute_import
 
-import json
 from autogames.scripts.games.game_manager import GameManager
+import json
 import random
 
 

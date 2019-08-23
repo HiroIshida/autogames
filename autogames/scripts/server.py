@@ -7,13 +7,13 @@
 from __future__ import absolute_import
 
 import argparse
-from games import get_game_titles
-import socket
+from autogames.scripts.games import get_game_titles
+from autogames.scripts.games.tictactoe_game import TictactoeGame
 import json
 import os
+import socket
 import threading
 import time
-from games.tictactoe_game import TictactoeGame
 
 
 class Server:
@@ -103,7 +103,7 @@ class Server:
         self.sock.close()
 
 
-if __name__ == "__main__":
+def main():
     # pick up available game titles from scripts/games
     game_titles = get_game_titles()
 
@@ -124,3 +124,7 @@ if __name__ == "__main__":
     # start game server
     server = Server(args.game)
     server.start_game_server()
+
+
+if __name__ == "__main__":
+    main()

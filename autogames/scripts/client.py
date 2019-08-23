@@ -5,12 +5,12 @@
 from __future__ import absolute_import
 
 import argparse
+from autogames.scripts.games import get_game_titles
+from autogames.scripts.games.tictactoe_game import TictactoeGame
+import json
 import os
 import socket
 import time
-import json
-from games.tictactoe_game import TictactoeGame
-from games import get_game_titles
 
 
 class Client:
@@ -48,7 +48,9 @@ class Client:
         try:
             # receive latest field data from server
             self.game_field.field = json.loads(received_message)['data']
-        except json.decoder.JSONDecodeError:
+        # https://stackoverflow.com/questions/44714046/python3-unable-to-import-jsondecodeerror-from-json-decoder
+        # ValueError is for python<=3.4.x, JSONDecodeError is for python>=3.5.0
+        except ValueError, json.decoder.JSONDecodeError:
             exit()
 
     def join_game(self):
@@ -60,7 +62,7 @@ class Client:
             self.send_move(self.game_field.think())
 
 
-if __name__ == '__main__':
+def main():
     # pick up available game titles from scripts/games
     game_titles = get_game_titles()
 
@@ -80,3 +82,7 @@ if __name__ == '__main__':
 
     client = Client(args.game)
     client.join_game()
+
+
+if __name__ == '__main__':
+    main()
