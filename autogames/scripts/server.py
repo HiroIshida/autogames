@@ -37,56 +37,46 @@ class Server:
         self.sock.bind((HOST, PORT))
         self.sock.listen(2)
 
-    def dispatch(self, player_number, method, args):
+    def wait_for_my_turn(self, player_number):
+        # wait for opponents to end their turns
+        # self.current_player_number: [1, ... , N_players]
+        self.lock.acquire()
+        self.current_player_number += 1
+        self.current_player_number %= self.game_field.N_player
+        if self.current_player_number == 0:
+            self.current_player_number += self.game_field.N_player
+        self.lock.release()
+        while self.current_player_number != player_number:
+            time.sleep(0.01)
 
-        if method == "add_player":
-            state = self.game_field.add_player()
-        if method == "put":
-            state = self.game_field.put(player_number, args["position"])
+    def call_next_player(self, connection):
+        message = self.game_field.field_to_string().encode()
+        connection.sendall(message)
 
+    def next_step_from_player(self, connection, player_number):
+        bin_data = connection.recv(1024)
+        str_data = bin_data.decode()
+        dict_data = json.loads(str_data)
+        args = dict_data["args"]
+        state = self.game_field.put(player_number, args["position"])
         return state
 
-    def loop_handler(self, connection, player_number):
+    def connection_loop_with_client(self, connection, player_number):
         while True:
-            try:
-                # wait for opponents to end their turns
-                # self.current_player_number: [1, ... , N_players]
-                self.lock.acquire()
-                self.current_player_number += 1
-                self.current_player_number %= self.game_field.N_player
-                if self.current_player_number == 0:
-                    self.current_player_number += self.game_field.N_player
-                self.lock.release()
-                while self.current_player_number != player_number:
-                    time.sleep(0.01)
-
-                # send current field to client
-                message = self.game_field.field_to_string().encode()
-                connection.sendall(message)
-
-                # receive input from client
-                bin_data = connection.recv(1024)
-                if not bin_data:
-                    break
-                str_data = bin_data.decode()
-                dict_data = json.loads(str_data)
-
-                method = dict_data["method"]
-                args = dict_data["args"]
-                state = self.dispatch(player_number, method, args)
+            # wait for opponents to finish the turns
+            self.wait_for_my_turn(player_number)
+            # send current field to client
+            self.call_next_player(connection)
+            # receive input from client
+            current_state = self.next_step_from_player(
+                connection, player_number)
+            print(self.game_field.get_pretty_gameboard())
+            # Game is end
+            if current_state[0] is False:
+                print(current_state[1])
                 print(self.game_field.get_pretty_gameboard())
-
-                # Game is end
-                if state[0] is False:
-                    print(state[1])
-                    print(self.game_field.get_pretty_gameboard())
-                    self.sock.close()
-                    os._exit(0)
-                    break
-            except KeyboardInterrupt:
-                print("Exit from main program")
                 self.sock.close()
-                os._exit(1)
+                os._exit(0)
                 break
 
     def main(self):
@@ -100,13 +90,13 @@ class Server:
                 self.sock.close()
                 exit()
                 break
-            state = self.dispatch(addr, "add_player", {})
+            state = self.game_field.add_player()
             isNewPlayerAccepted = state[0]
             if isNewPlayerAccepted:
                 self.client_list.append((conn, addr))
                 thread = threading.Thread(
                     # len(self.client_list) means player_number
-                    target=self.loop_handler,
+                    target=self.connection_loop_with_client,
                     args=(conn, len(self.client_list)))
                 thread.start()
         self.sock.close()

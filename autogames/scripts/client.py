@@ -32,11 +32,9 @@ class Client:
         self.field = None
 
     def send(self, position):
-        method = "put"
         args = {'position': position}
         try:
             data = dict()
-            data["method"] = method
             data["args"] = args
             str_data = json.dumps(data)
             message_send = str_data.encode()
