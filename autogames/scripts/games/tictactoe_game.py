@@ -12,6 +12,9 @@ class TictactoeGame(GameManager, object):
         self.dim = dim
         self.field = [[0 for x in range(dim)] for y in range(dim)]
         self.isGameFinish = False
+        self.stones = {}
+        self.stones[1] = 1   # player1 use stone1
+        self.stones[2] = -1  # player2 use stone-1
 
     def put(self, player_number, position):
         # return from this method if invalid operation is executed
@@ -22,27 +25,27 @@ class TictactoeGame(GameManager, object):
                 print("out of the game field")
             else:
                 print("there is already a stone here")
-                print(self.available_positions())
-                print(position)
             return(True, 'Invalid operation !')
 
         current_turn_player = self.whos_turn()
-        if current_turn_player == 1:
-            stone = 1
-        elif current_turn_player == 2:
-            stone = -1
+        try:
+            stone = self.stones[current_turn_player]
+        except KeyError:
+            return(True, current_turn_player[1])  # please wait for opponent to login
 
         if not player_number == current_turn_player:
             return (True, "please wait your opponent for finishing the turn")
 
         # put a stone;
         self.field[x][y] = stone
-        self.go_next_turn()
 
         # check checkmate
-        result = self._check_checkmate(stone, x, y)
+        result = self._check_checkmate(player_number)
         isGameEnd = result[0]
         message = result[1] + "\n" + self.get_pretty_gameboard()
+
+        if not isGameEnd:
+            self.go_next_turn()
         return (not isGameEnd, message)
 
     def get_field(self):
@@ -68,27 +71,40 @@ class TictactoeGame(GameManager, object):
             y_str_line += (x_str_line + "\n")
         return y_str_line
 
-    def _check_checkmate(self, stone, x, y):
+    def _check_checkmate(self, player_number):
         # check checkmate in a sequential (NOT batch) manner
         # by calling only when players put a stone.
 
-        message_win = "you win"
+        message_win = "player" + str(player_number) + " win"
+        message_lose = "player" + str(player_number) + " lose"
         message_draw = "draw"
         message_inprogress = ""
 
-        # check horizontal (x)
-        sum_x = 0
-        for i in range(self.dim):
-            sum_x += self.field[x][i]
-        if sum_x == stone * 3:
-            return (True, message_win)
+        stone = self.stones[player_number]
+        if player_number == 1:
+            opponent_player_number = 2
+        elif player_number == 2:
+            opponent_player_number = 1
+        opponent_stone = self.stones[opponent_player_number]
 
+        # check horizontal (x)
+        for y in range(self.dim):
+            sum_x = 0
+            for x in range(self.dim):
+                sum_x += self.field[x][y]
+            if sum_x == stone * 3:
+                return (True, message_win)
+            elif sum_x == opponent_stone * 3:
+                return (True, message_lose)
         # check vertical (y)
-        sum_y = 0
-        for i in range(self.dim):
-            sum_y += self.field[i][y]
-        if sum_y == stone * 3:
-            return (True, message_win)
+        for x in range(self.dim):
+            sum_y = 0
+            for y in range(self.dim):
+                sum_y += self.field[x][y]
+            if sum_y == stone * 3:
+                return (True, message_win)
+            elif sum_y == opponent_stone * 3:
+                return (True, message_lose)
 
         # check diagonal
         sum_diag = 0
@@ -96,6 +112,8 @@ class TictactoeGame(GameManager, object):
             sum_diag += self.field[i][i]
         if sum_diag == stone * 3:
             return (True, message_win)
+        elif sum_diag == opponent_stone * 3:
+            return (True, message_lose)
 
         # check whether the field is full or not
         field_flatten = sum(self.field, [])

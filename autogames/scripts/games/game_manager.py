@@ -39,5 +39,5 @@ class GameManager:
         pass
 
     # @abstractmethod
-    def check_checkmate_field(self, stone, x, y):
+    def check_checkmate_field(self, player_number):
         pass
