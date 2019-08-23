@@ -6,7 +6,6 @@ from __future__ import absolute_import
 
 import argparse
 import os
-import random
 import socket
 import time
 import json
@@ -61,15 +60,10 @@ class Client:
         message_send = str_data.encode()
         self.client.sendall(message_send)
 
-    def rand_algorithm(self):
-        self.put((random.randint(0, 2), random.randint(0, 2)))
-
     def main(self):
         while True:
             time.sleep(0.1)
-            # PLEASE WRITE ME
-            self.rand_algorithm()
-            # PLEASE WRITE ME
+            self.put(self.game_field.think())
 
 
 if __name__ == '__main__':
