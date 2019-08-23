@@ -31,7 +31,7 @@ class Client:
         self.client.connect((self.host, self.port))
         self.field = None
 
-    def send(self, position):
+    def send_move(self, position):
         args = {'position': position}
         try:
             data = dict()
@@ -43,20 +43,21 @@ class Client:
             print("Game Finished")
             os._exit(0)
 
-    def receive(self):
+    def wait_for_my_turn(self):
         received_message = self.client.recv(1024).decode()
         try:
-            self.game_field.field = json.loads(received_message)
+            # receive latest field data from server
+            self.game_field.field = json.loads(received_message)['data']
         except json.decoder.JSONDecodeError:
             exit()
 
-    def main(self):
+    def join_game(self):
         while True:
             time.sleep(0.1)
             # wait until receiving current field state
-            self.receive()
+            self.wait_for_my_turn()
             # execute my turn
-            self.send(self.game_field.think())
+            self.send_move(self.game_field.think())
 
 
 if __name__ == '__main__':
@@ -78,4 +79,4 @@ if __name__ == '__main__':
         exit()
 
     client = Client(args.game)
-    client.main()
+    client.joint_game()

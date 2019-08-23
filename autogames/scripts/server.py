@@ -37,7 +37,7 @@ class Server:
         self.sock.bind((HOST, PORT))
         self.sock.listen(2)
 
-    def wait_for_my_turn(self, player_number):
+    def wait_for_opponents(self, player_number):
         # wait for opponents to end their turns
         # self.current_player_number: [1, ... , N_players]
         self.lock.acquire()
@@ -53,7 +53,7 @@ class Server:
         message = self.game_field.field_to_string().encode()
         connection.sendall(message)
 
-    def next_step_from_player(self, connection, player_number):
+    def next_move_from_player(self, connection, player_number):
         bin_data = connection.recv(1024)
         str_data = bin_data.decode()
         dict_data = json.loads(str_data)
@@ -64,11 +64,11 @@ class Server:
     def connection_loop_with_client(self, connection, player_number):
         while True:
             # wait for opponents to finish the turns
-            self.wait_for_my_turn(player_number)
+            self.wait_for_opponents(player_number)
             # send current field to client
             self.call_next_player(connection)
             # receive input from client
-            current_state = self.next_step_from_player(
+            current_state = self.next_move_from_player(
                 connection, player_number)
             print(self.game_field.get_pretty_gameboard())
             # Game is end
@@ -79,7 +79,8 @@ class Server:
                 os._exit(0)
                 break
 
-    def main(self):
+    def start_game_server(self):
+        # wait for clients to join this game
         while True:
             try:
                 conn, addr = self.sock.accept()
@@ -98,6 +99,7 @@ class Server:
                     # len(self.client_list) means player_number
                     target=self.connection_loop_with_client,
                     args=(conn, len(self.client_list)))
+                # thread to communicate with each client
                 thread.start()
         self.sock.close()
 
@@ -122,4 +124,4 @@ if __name__ == "__main__":
 
     # start game server
     server = Server(args.game)
-    server.main()
+    server.start_game_server()
