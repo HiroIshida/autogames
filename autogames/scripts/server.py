@@ -73,8 +73,7 @@ class Server:
             print(self.game_field.show_field())
             # Game is end
             if current_state[0] is False:
-                print(current_state[1])
-                print(self.game_field.show_field())
+                print(current_state[1])  # player-n win
                 self.sock.close()
                 os._exit(0)
                 break

@@ -116,6 +116,13 @@ class TictactoeGame(GameManager, object):
             return (True, message_win)
         elif sum_diag == opponent_stone * 3:
             return (True, message_lose)
+        sum_diag = 0
+        for i in range(self.dim):
+            sum_diag += self.field[self.dim - 1 - i][i]
+        if sum_diag == stone * 3:
+            return (True, message_win)
+        elif sum_diag == opponent_stone * 3:
+            return (True, message_lose)
 
         # check whether the field is full or not
         field_flatten = sum(self.field, [])
