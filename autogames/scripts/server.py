@@ -24,6 +24,7 @@ class Server:
 
         self.game_field = game_instances[game_title]
         self.client_list = []
+        self.address_to_player_number = {}
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
@@ -33,22 +34,18 @@ class Server:
         self.sock.bind((HOST, PORT))
         self.sock.listen(2)
 
-    def dispatch(self, address_, method, args):
-        # we will concatinate addresses and make a list of them later in
-        # the method: TictactoGame.add_player. For this purpose, here, we convert
-        # address_ (list) -> address (tuple)
+    def dispatch(self, player_number, method, args):
 
-        address = (address_[0], address_[1])
         if method == "add_player":
             state = self.game_field.add_player()
         if method == "put":
-            state = self.game_field.put(address, args["position"])
+            state = self.game_field.put(player_number, args["position"])
         if method == "get_field":
             state = self.game_field.get_field()
 
         return state
 
-    def loop_handler(self, connection, address):
+    def loop_handler(self, connection, player_number):
         while True:
             try:
                 bin_data = connection.recv(1024)
@@ -59,7 +56,7 @@ class Server:
 
                 method = dict_data["method"]
                 args = dict_data["args"]
-                state = self.dispatch(address, method, args)
+                state = self.dispatch(player_number, method, args)
                 message = state[1].encode()
                 connection.sendall(message)
                 if state[0] is False:
@@ -88,7 +85,8 @@ class Server:
             if isNewPlayerAccepted:
                 self.client_list.append((conn, addr))
                 thread = threading.Thread(
-                    target=self.loop_handler, args=(conn, addr))
+                    # len(self.client_list) means player_number
+                    target=self.loop_handler, args=(conn, len(self.client_list)))
                 thread.start()
         self.sock.close()
 

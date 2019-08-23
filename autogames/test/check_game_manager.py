@@ -35,17 +35,17 @@ def test_whos_turn_and_go_next_turn():
         gm.add_player()
 
     # check turn 1
-    number, number_ = gm.whos_turn()
+    number = gm.whos_turn()
     assert number == 1
 
     # check turn 2
     gm.go_next_turn()
-    number, number_ = gm.whos_turn()
+    number = gm.whos_turn()
     assert number == 2
 
     # check turn 3
     gm.go_next_turn()
-    number, number_ = gm.whos_turn()
+    number = gm.whos_turn()
     assert number == 3
 
 
