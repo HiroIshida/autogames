@@ -31,7 +31,8 @@ class TictactoeGame(GameManager, object):
         try:
             stone = self.stones[current_turn_player]
         except KeyError:
-            return(True, current_turn_player[1])  # please wait for opponent to login
+            # please wait for opponent to login
+            return(True, current_turn_player[1])
 
         if not player_number == current_turn_player:
             return (True, "please wait your opponent for finishing the turn")
