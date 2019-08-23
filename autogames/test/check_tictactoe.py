@@ -17,7 +17,7 @@ for i in range(3):
         game_field.put(players[count % 2], [i, j])
         count += 1
 
-print(game_field.get_pretty_gameboard())
+print(game_field.show_field())
 result1 = game_field._check_checkmate(players[0])
 result2 = game_field._check_checkmate(players[1])
 print(result1[1])
