@@ -31,41 +31,34 @@ class Client:
         self.client.connect((self.host, self.port))
         self.field = None
 
-    def put(self, position):
-        message_recieved = self.client.recv(1024).decode()
-
+    def send(self, position):
         method = "put"
         args = {'position': position}
         try:
-            self._send(method, args)
+            data = dict()
+            data["method"] = method
+            data["args"] = args
+            str_data = json.dumps(data)
+            message_send = str_data.encode()
+            self.client.sendall(message_send)
         except BrokenPipeError:
             print("Game Finished")
             os._exit(0)
 
-        print(message_recieved)
-
-    def get_field(self):
-        method = "get_field"
-        args = {}
-        self._send(method, args)
-        message_recieved_ = self.client.recv(1024)
-        message_recieved = message_recieved_.decode()
-        json_data = json.loads(message_recieved)
-        field = json_data["data"]
-        return field
-
-    def _send(self, method, args):
-        data = dict()
-        data["method"] = method
-        data["args"] = args
-        str_data = json.dumps(data)
-        message_send = str_data.encode()
-        self.client.sendall(message_send)
+    def receive(self):
+        received_message = self.client.recv(1024).decode()
+        try:
+            self.game_field.field = json.loads(received_message)
+        except json.decoder.JSONDecodeError:
+            exit()
 
     def main(self):
         while True:
             time.sleep(0.1)
-            self.put(self.game_field.think())
+            # wait until receiving current field state
+            self.receive()
+            # execute my turn
+            self.send(self.game_field.think())
 
 
 if __name__ == '__main__':

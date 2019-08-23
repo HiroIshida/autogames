@@ -43,15 +43,13 @@ class Server:
             state = self.game_field.add_player()
         if method == "put":
             state = self.game_field.put(player_number, args["position"])
-        if method == "get_field":
-            state = self.game_field.get_field()
 
         return state
 
     def loop_handler(self, connection, player_number):
         while True:
             try:
-                # wait for opponent turn
+                # wait for opponents to end their turns
                 # self.current_player_number: [1, ... , N_players]
                 self.lock.acquire()
                 self.current_player_number += 1
@@ -59,13 +57,11 @@ class Server:
                 if self.current_player_number == 0:
                     self.current_player_number += self.game_field.N_player
                 self.lock.release()
-
-                # wait for opponents to end their turns
                 while self.current_player_number != player_number:
                     time.sleep(0.01)
 
                 # send current field to client
-                message = self.game_field.get_pretty_gameboard().encode()
+                message = self.game_field.field_to_string().encode()
                 connection.sendall(message)
 
                 # receive input from client
@@ -78,8 +74,11 @@ class Server:
                 method = dict_data["method"]
                 args = dict_data["args"]
                 state = self.dispatch(player_number, method, args)
+                print(self.game_field.get_pretty_gameboard())
 
+                # Game is end
                 if state[0] is False:
+                    print(state[1])
                     print(self.game_field.get_pretty_gameboard())
                     self.sock.close()
                     os._exit(0)
@@ -107,7 +106,8 @@ class Server:
                 self.client_list.append((conn, addr))
                 thread = threading.Thread(
                     # len(self.client_list) means player_number
-                    target=self.loop_handler, args=(conn, len(self.client_list)))
+                    target=self.loop_handler,
+                    args=(conn, len(self.client_list)))
                 thread.start()
         self.sock.close()
 

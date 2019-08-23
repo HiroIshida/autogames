@@ -44,17 +44,17 @@ class TictactoeGame(GameManager, object):
         # check checkmate
         result = self._check_checkmate(player_number)
         isGameEnd = result[0]
-        message = result[1] + "\n" + self.get_pretty_gameboard()
+        message = result[1]
 
         if not isGameEnd:
             self.go_next_turn()
         return (not isGameEnd, message)
 
-    def get_field(self):
+    def field_to_string(self):
         list_data = self.field
         dict_data = {'data': list_data}
         str_data = json.dumps(dict_data)
-        return (True, str_data)
+        return str_data
 
     def get_pretty_gameboard(self):
         y_str_line = ""
