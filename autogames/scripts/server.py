@@ -7,7 +7,7 @@
 from __future__ import absolute_import
 
 import argparse
-import glob
+from games import get_game_titles
 import socket
 import json
 import os
@@ -21,8 +21,8 @@ class Server:
         # you can see available game list by command below
         # python server.py --list-games or python server.py -l
         game_instances = {'tictactoe_game': TictactoeGame(3)}
-
         self.game_field = game_instances[game_title]
+
         self.client_list = []
         self.address_to_player_number = {}
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -93,15 +93,7 @@ class Server:
 
 if __name__ == "__main__":
     # pick up available game titles from scripts/games
-    game_titles = []
-    file_names = glob.glob(os.path.join(os.getcwd(), 'games/*'))
-    for file_name in file_names:
-        file_name = os.path.basename(file_name)
-        # pick up only python files
-        if file_name.endswith('.py') and \
-           file_name != '__init__.py' and \
-           file_name != 'game_manager.py':
-            game_titles.append(os.path.splitext(file_name)[0])
+    game_titles = get_game_titles()
 
     # parse command line arguments
     parser = argparse.ArgumentParser(description='description of server.py')
