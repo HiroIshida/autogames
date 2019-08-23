@@ -32,6 +32,8 @@ class Client:
         self.field = None
 
     def put(self, position):
+        message_recieved = self.client.recv(1024).decode()
+
         method = "put"
         args = {'position': position}
         try:
@@ -39,7 +41,7 @@ class Client:
         except BrokenPipeError:
             print("Game Finished")
             os._exit(0)
-        message_recieved = self.client.recv(1024).decode()
+
         print(message_recieved)
 
     def get_field(self):
