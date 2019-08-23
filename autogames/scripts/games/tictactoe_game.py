@@ -23,14 +23,14 @@ class TictactoeGame(GameManager, object):
         if not self.field[x][y] == 0:
             return (True, "there is already a stone here")
 
-        current_turn_player, player_number = self.whos_turn()
-        if player_number == 1:
+        current_turn_player = self.whos_turn()
+        if current_turn_player == 1:
             stone = 1
-        elif player_number == 2:
+        elif current_turn_player == 2:
             stone = -1
 
         if not player_number == current_turn_player:
-            return (True, "please wait for your opponent finish the turn")
+            return (True, "please wait your opponent for finishing the turn")
 
         # put a stone;
         self.field[x][y] = stone

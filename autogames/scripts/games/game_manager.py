@@ -19,8 +19,7 @@ class GameManager:
         if not self._isGameStart():
             return (False, "whos_turn: the game hasn't started yet")
         n = self.counter % self.N_player
-        number = self.player_numbers[n]
-        return number, self.player_numbers[n]
+        return self.player_numbers[n]
 
     def go_next_turn(self):
         if not self._isGameStart():
