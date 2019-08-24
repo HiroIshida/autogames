@@ -30,10 +30,12 @@ class Client:
     # host: The server's hostname or IP address
     # port: The port used by the server
     def create_socket(self, host, port, socket_partner):
-        self.clients[socket_partner] = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.clients[socket_partner] = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
-        self.clients[socket_partner].setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.clients[socket_partner].setsockopt(
+            socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.clients[socket_partner].settimeout(3)
         try:
             self.clients[socket_partner].connect((host, port))
