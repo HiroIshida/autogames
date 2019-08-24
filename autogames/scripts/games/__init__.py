@@ -27,7 +27,7 @@ def create_message_json(field=None, move=None):
     message = {
         'field': field,  # current field state
         'move': move,  # next move by player
-        }
+    }
     message_json = json.dumps(message)
     return message_json
 
