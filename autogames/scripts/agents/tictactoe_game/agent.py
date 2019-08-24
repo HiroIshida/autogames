@@ -63,6 +63,7 @@ def main():
         message_json = create_message_json(
             field=None, move=next_move)
         agent.connection.sendall(message_json.encode())
+
     agent.sock.close()
 
 
