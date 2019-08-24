@@ -7,9 +7,8 @@
 from __future__ import absolute_import
 
 import argparse
-from autogames.scripts.games import get_game_titles
+from autogames.scripts.games import get_game_titles, create_message_json, read_message_json  # NOQA
 from autogames.scripts.games.tictactoe_game import TictactoeGame
-import json
 import os
 import socket
 import threading
@@ -50,15 +49,15 @@ class Server:
             time.sleep(0.01)
 
     def call_next_player(self, connection):
-        message = self.game_field.field_to_json().encode()
-        connection.sendall(message)
+        message_json = create_message_json(
+            field=self.game_field.field, move=None)
+        connection.sendall(message_json.encode())
 
     def next_move_from_player(self, connection, player_number):
         bin_data = connection.recv(1024)
-        str_data = bin_data.decode()
-        dict_data = json.loads(str_data)
-        args = dict_data["args"]
-        state = self.game_field.put(player_number, args["position"])
+        message = bin_data.decode()
+        dict_data = read_message_json(message)
+        state = self.game_field.put(player_number, dict_data["move"])
         return state
 
     def connection_loop_with_client(self, connection, player_number):
