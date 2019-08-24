@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 from autogames.scripts.games.game_manager import GameManager
-import random
 
 
 class TictactoeGame(GameManager, object):
