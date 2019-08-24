@@ -44,12 +44,12 @@ class Client:
             exit(1)
 
     def send_move(self):
-        # receive next move from agent
+        # tell the current field state to agent
         message_json = create_message_json(field=self.field, move=None)
         self.clients['agent'].sendall(message_json.encode())
+        # receive next move from agent
         message = self.clients['agent'].recv(1024).decode()
         next_move = read_message_json(message)['move']
-
         # send next move to server
         try:
             message_json = create_message_json(field=None, move=next_move)
