@@ -12,7 +12,7 @@ autogames_client --game tictactoe_game &
 pids[$COUNT]=$!
 COUNT=$((COUNT+1))
 sleep 0.1
-# client1
+# client2
 autogames_client --game tictactoe_game &
 pids[$COUNT]=$!
 COUNT=$((COUNT+1))
