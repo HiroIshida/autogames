@@ -54,8 +54,11 @@ class Client:
             try:
                 self.clients['agent'].sendall(message_json.encode())
             except BrokenPipeError:
-                # TODO: prevent this error !!
-                print('BrokenPipeError: wait for agent server')
+                print('BrokenPipeError: socket.')
+                print('Maybe, the cause is socket communication partner is \
+                not ready for receiving message.')
+                print('You may be able to solve this problem \
+                by adding proper sleep() between launching each program.')
                 exit(1)
                 continue
             break
