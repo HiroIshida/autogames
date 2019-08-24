@@ -9,6 +9,7 @@ from autogames.scripts.games import get_game_titles, create_message_json, read_m
 import os
 import socket
 import threading
+import time
 
 
 class Client:
@@ -25,6 +26,7 @@ class Client:
             args=('127.0.0.1', agent_port, 'agent'))
         thread_for_server.start()
         thread_for_agent.start()
+        time.sleep(0.1)
 
     # host: The server's hostname or IP address
     # port: The port used by the server
