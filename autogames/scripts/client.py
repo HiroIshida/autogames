@@ -9,7 +9,6 @@ from autogames.scripts.games import get_game_titles, create_message_json, read_m
 import os
 import socket
 import threading
-import time
 
 
 class Client:
@@ -66,13 +65,6 @@ class Client:
         # receive latest field data from server
         self.field = read_message_json(message)['field']
 
-    def join_game(self):
-        while True:
-            # wait until receiving current field state
-            self.wait_for_my_turn()
-            # execute my turn
-            self.send_move()
-
 
 def main():
     # pick up available game titles from scripts/games
@@ -95,8 +87,13 @@ def main():
         print(game_titles)
         exit(0)
 
+    # join and play the game
     client = Client(args.game, int(args.agent_port))
-    client.join_game()
+    while True:
+        # wait until receiving current field state
+        client.wait_for_my_turn()
+        # execute my turn
+        client.send_move()
 
 
 if __name__ == '__main__':

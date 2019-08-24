@@ -77,28 +77,6 @@ class Server:
                 self.sock.close()
                 os._exit(0)
 
-    def start_game_server(self):
-        # wait for clients to join this game
-        while True:
-            try:
-                conn, addr = self.sock.accept()
-                print("[server.py] [new client address]=>{}".format(addr[0]))
-                print("[server.py] [new client port]=>{}".format(addr[1]))
-            except KeyboardInterrupt:
-                self.sock.close()
-                exit(1)
-            state = self.game_field.add_player()
-            isNewPlayerAccepted = state[0]
-            if isNewPlayerAccepted:
-                self.client_list.append((conn, addr))
-                thread = threading.Thread(
-                    # len(self.client_list) means player_number
-                    target=self.connection_loop_with_client,
-                    args=(conn, len(self.client_list)))
-                # thread to communicate with each client
-                thread.start()
-        self.sock.close()
-
 
 def main():
     # pick up available game titles from scripts/games
@@ -120,7 +98,26 @@ def main():
 
     # start game server
     server = Server(args.game)
-    server.start_game_server()
+    while True:
+        try:
+            # wait for clients to join this game
+            conn, addr = server.sock.accept()
+            print("[server.py] [new client address]=>{}".format(addr[0]))
+            print("[server.py] [new client port]=>{}".format(addr[1]))
+        except KeyboardInterrupt:
+            server.sock.close()
+            exit(1)
+        state = server.game_field.add_player()
+        isNewPlayerAccepted = state[0]
+        if isNewPlayerAccepted:
+            server.client_list.append((conn, addr))
+            thread = threading.Thread(
+                # len(server.client_list) means player_number
+                target=server.connection_loop_with_client,
+                args=(conn, len(server.client_list)))
+            # thread to communicate with each client
+            thread.start()
+    server.sock.close()
 
 
 if __name__ == "__main__":
