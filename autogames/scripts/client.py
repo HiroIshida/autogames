@@ -5,9 +5,8 @@
 from __future__ import absolute_import
 
 import argparse
-from autogames.scripts.games import get_game_titles
+from autogames.scripts.games import get_game_titles, create_message_json, read_message_json  # NOQA
 from autogames.scripts.games.tictactoe_game import TictactoeGame
-import json
 import os
 import socket
 import time
@@ -32,26 +31,17 @@ class Client:
         self.field = None
 
     def send_move(self, position):
-        args = {'position': position}
         try:
-            data = dict()
-            data["args"] = args
-            str_data = json.dumps(data)
-            message_send = str_data.encode()
-            self.client.sendall(message_send)
+            message_json = create_message_json(field=None, move=position)
+            self.client.sendall(message_json.encode())
         except BrokenPipeError:
             print("Game Finished")
             os._exit(0)
 
     def wait_for_my_turn(self):
-        received_message = self.client.recv(1024).decode()
-        try:
-            # receive latest field data from server
-            self.game_field.field = json.loads(received_message)['data']
-        # https://stackoverflow.com/questions/44714046/python3-unable-to-import-jsondecodeerror-from-json-decoder
-        # ValueError is for python<=3.4.x, JSONDecodeError is for python>=3.5.0
-        except ValueError, json.decoder.JSONDecodeError:
-            exit()
+        message = self.client.recv(1024).decode()
+        # receive latest field data from server
+        self.game_field.field = read_message_json(message)['field']
 
     def join_game(self):
         while True:

@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 from autogames.scripts.games.game_manager import GameManager
-import json
 import random
 
 
@@ -49,12 +48,6 @@ class TictactoeGame(GameManager, object):
         if not isGameEnd:
             self.go_next_turn()
         return (not isGameEnd, message)
-
-    def field_to_json(self):
-        list_data = self.field
-        dict_data = {'data': list_data}
-        str_data = json.dumps(dict_data)
-        return str_data
 
     def show_field(self):
         y_str_line = ""
