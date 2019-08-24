@@ -27,19 +27,25 @@ class Client:
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         self.client.settimeout(3)
-        self.client.connect((self.host, self.port))
-        self.field = None
+        try:
+            self.client.connect((self.host, self.port))
+        except ConnectionRefusedError:
+            print('Connection refused')
+            exit(1)
 
     def send_move(self, position):
         try:
             message_json = create_message_json(field=None, move=position)
             self.client.sendall(message_json.encode())
         except BrokenPipeError:
-            print("Game Finished")
-            os._exit(0)
+            print("Pipe broken")
+            os._exit(1)
 
     def wait_for_my_turn(self):
         message = self.client.recv(1024).decode()
+        if message == '':
+            print('[Client] Finished.')
+            exit(0)
         # receive latest field data from server
         self.game_field.field = read_message_json(message)['field']
 
@@ -68,7 +74,7 @@ def main():
     if args.list_games is True:
         print('you must choose game title from below:')
         print(game_titles)
-        exit()
+        exit(0)
 
     client = Client(args.game)
     client.join_game()

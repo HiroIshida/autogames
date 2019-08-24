@@ -73,9 +73,9 @@ class Server:
             # Game is end
             if current_state[0] is False:
                 print(current_state[1])  # player-n win
+                print('[Server] Finished.')
                 self.sock.close()
                 os._exit(0)
-                break
 
     def start_game_server(self):
         # wait for clients to join this game
@@ -87,8 +87,7 @@ class Server:
                 print("[client port]=>{}".format(addr[1]))
             except KeyboardInterrupt:
                 self.sock.close()
-                exit()
-                break
+                exit(1)
             state = self.game_field.add_player()
             isNewPlayerAccepted = state[0]
             if isNewPlayerAccepted:
@@ -118,7 +117,7 @@ def main():
     if args.list_games is True:
         print('you must choose game title from below:')
         print(game_titles)
-        exit()
+        exit(0)
 
     # start game server
     server = Server(args.game)
