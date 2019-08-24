@@ -38,7 +38,7 @@ def read_message_json(message_json):
         dict_data = json.loads(message_json)
     # https://stackoverflow.com/questions/44714046/python3-unable-to-import-jsondecodeerror-from-json-decoder
     # ValueError is for python<=3.4.x, JSONDecodeError is for python>=3.5.0
-    except ValueError, json.decoder.JSONDecodeError:
+    except (ValueError, json.decoder.JSONDecodeError):
         exit()
 
     return dict_data
