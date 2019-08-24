@@ -40,9 +40,14 @@ class Agent:
         return random.choice(self.game_field.available_positions())
 
 
-def main(agent_port):
-    agent = Agent(agent_port)
+def main():
+    parser = argparse.ArgumentParser(description='description of server.py')
+    parser.add_argument('--agent-port', default=65432,
+                        help='show all game titles which you can play')
+    args = parser.parse_args()
 
+    # communicate with client and tell the next move
+    agent = Agent(int(args.agent_port))
     while True:
         # receive current field state
         bin_data = agent.connection.recv(1024)
@@ -58,14 +63,9 @@ def main(agent_port):
         message_json = create_message_json(
             field=None, move=next_move)
         agent.connection.sendall(message_json.encode())
+
     agent.sock.close()
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='description of server.py')
-    parser.add_argument('--agent-port', default=65432,
-                        help='show all game titles which you can play')
-
-    args = parser.parse_args()
-
-    main(int(args.agent_port))
+    main()

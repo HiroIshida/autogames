@@ -26,6 +26,7 @@ class Client:
             args=('127.0.0.1', agent_port, 'agent'))
         thread_for_server.start()
         thread_for_agent.start()
+        time.sleep(0.1)
 
     # host: The server's hostname or IP address
     # port: The port used by the server
@@ -35,21 +36,35 @@ class Client:
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.clients[socket_partner].setsockopt(
-            socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            socket.SOL_SOCKET, socket.SO_REUSEADDR, 3)
         self.clients[socket_partner].settimeout(3)
+
         try:
             self.clients[socket_partner].connect((host, port))
-        except ConnectionRefusedError:
+        # catch all exception because ConnectionRefusedError is not in python 2
+        # https://ja.stackoverflow.com/questions/6972/python%E3%81%A7%E3%81%99%E3%81%B9%E3%81%A6%E3%81%AE%E4%BE%8B%E5%A4%96%E3%82%92%E3%82%AD%E3%83%A3%E3%83%83%E3%83%81%E3%81%97-%E8%A9%B3%E7%B4%B0%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%95%E3%81%9B%E3%81%9F%E3%81%84/7008
+        except Exception:
             print('Connection refused')
             exit(1)
 
     def send_move(self):
-        # receive next move from agent
+        # tell the current field state to agent
         message_json = create_message_json(field=self.field, move=None)
-        self.clients['agent'].sendall(message_json.encode())
+        while True:
+            try:
+                self.clients['agent'].sendall(message_json.encode())
+            except BrokenPipeError:
+                print('BrokenPipeError: socket.')
+                print('Maybe, the cause is socket communication partner is \
+                not ready for receiving message.')
+                print('You may be able to solve this problem \
+                by adding proper sleep() between launching each program.')
+                exit(1)
+                continue
+            break
+        # receive next move from agent
         message = self.clients['agent'].recv(1024).decode()
         next_move = read_message_json(message)['move']
-
         # send next move to server
         try:
             message_json = create_message_json(field=None, move=next_move)
@@ -65,13 +80,6 @@ class Client:
             exit(0)
         # receive latest field data from server
         self.field = read_message_json(message)['field']
-
-    def join_game(self):
-        while True:
-            # wait until receiving current field state
-            self.wait_for_my_turn()
-            # execute my turn
-            self.send_move()
 
 
 def main():
@@ -95,8 +103,13 @@ def main():
         print(game_titles)
         exit(0)
 
+    # join and play the game
     client = Client(args.game, int(args.agent_port))
-    client.join_game()
+    while True:
+        # wait until receiving current field state
+        client.wait_for_my_turn()
+        # execute my turn
+        client.send_move()
 
 
 if __name__ == '__main__':
