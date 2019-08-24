@@ -26,7 +26,6 @@ class Client:
             args=('127.0.0.1', agent_port, 'agent'))
         thread_for_server.start()
         thread_for_agent.start()
-        time.sleep(0.1)
 
     # host: The server's hostname or IP address
     # port: The port used by the server
@@ -36,10 +35,14 @@ class Client:
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.clients[socket_partner].setsockopt(
-            socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+            socket.SOL_SOCKET, socket.SO_REUSEADDR, 3000)
+        self.clients[socket_partner].setsockopt(
+            socket.SOL_SOCKET, socket.SO_KEEPALIVE, 20)
         self.clients[socket_partner].settimeout(3)
+
         try:
             self.clients[socket_partner].connect((host, port))
+            time.sleep(0.1)
         # catch all exception because ConnectionRefusedError is not in python 2
         # https://ja.stackoverflow.com/questions/6972/python%E3%81%A7%E3%81%99%E3%81%B9%E3%81%A6%E3%81%AE%E4%BE%8B%E5%A4%96%E3%82%92%E3%82%AD%E3%83%A3%E3%83%83%E3%83%81%E3%81%97-%E8%A9%B3%E7%B4%B0%E3%82%92%E8%A1%A8%E7%A4%BA%E3%81%95%E3%81%9B%E3%81%9F%E3%81%84/7008
         except Exception:
