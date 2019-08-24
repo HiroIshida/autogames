@@ -6,7 +6,6 @@ from __future__ import absolute_import
 
 import argparse
 from autogames.scripts.games import get_game_titles, create_message_json, read_message_json  # NOQA
-from autogames.scripts.games.tictactoe_game import TictactoeGame
 import os
 import socket
 import threading
@@ -16,12 +15,9 @@ import time
 class Client:
 
     def __init__(self, game_title, agent_port):
-        # you can see available game list by command below
-        # python client.py --list-games or python client.py -l
-        game_instances = {'tictactoe_game': TictactoeGame(3)}
-        self.game_field = game_instances[game_title]
-        self.clients = {}
+        self.field = None  # field state of game board
 
+        self.clients = {}
         thread_for_server = threading.Thread(
             target=self.create_socket,
             args=('127.0.0.1', 65431, 'server'))
@@ -47,7 +43,7 @@ class Client:
 
     def send_move(self):
         # receive next move from agent
-        message_json = create_message_json(field=self.game_field.field, move=None)
+        message_json = create_message_json(field=self.field, move=None)
         self.clients['agent'].sendall(message_json.encode())
         message = self.clients['agent'].recv(1024).decode()
         next_move = read_message_json(message)['move']
@@ -66,11 +62,10 @@ class Client:
             print('[Client] Finished.')
             exit(0)
         # receive latest field data from server
-        self.game_field.field = read_message_json(message)['field']
+        self.field = read_message_json(message)['field']
 
     def join_game(self):
         while True:
-            # time.sleep(0.1)
             # wait until receiving current field state
             self.wait_for_my_turn()
             # execute my turn

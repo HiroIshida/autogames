@@ -27,14 +27,16 @@ class Agent:
 
         try:
             self.connection, addr = self.sock.accept()
-            print("[agent.py] accept new socket")
-            print("[agent.py] [client address]=>{}".format(addr[0]))
-            print("[agent.py] [client port]=>{}".format(addr[1]))
+            print("[agent.py] [new client address]=>{}".format(addr[0]))
+            print("[agent.py] [new client port]=>{}".format(addr[1]))
         except KeyboardInterrupt:
             self.sock.close()
             exit(1)
 
+    # Main function for agent
+    # Write your own algorithm here
     def think(self):
+        # Sample: random algorithm
         return random.choice(self.game_field.available_positions())
 
 

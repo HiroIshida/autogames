@@ -82,9 +82,8 @@ class Server:
         while True:
             try:
                 conn, addr = self.sock.accept()
-                print("accept new socket")
-                print("[client address]=>{}".format(addr[0]))
-                print("[client port]=>{}".format(addr[1]))
+                print("[server.py] [new client address]=>{}".format(addr[0]))
+                print("[server.py] [new client port]=>{}".format(addr[1]))
             except KeyboardInterrupt:
                 self.sock.close()
                 exit(1)
