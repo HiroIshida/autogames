@@ -43,9 +43,5 @@ class GameManager:
         pass
 
     # @abstractmethod
-    def think(self):
-        pass
-
-    # @abstractmethod
     def show_field(self):
         pass

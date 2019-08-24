@@ -6,56 +6,72 @@ from __future__ import absolute_import
 
 import argparse
 from autogames.scripts.games import get_game_titles, create_message_json, read_message_json  # NOQA
-from autogames.scripts.games.tictactoe_game import TictactoeGame
 import os
 import socket
+import threading
 import time
 
 
 class Client:
 
-    def __init__(self, game_title):
-        # you can see available game list by command below
-        # python client.py --list-games or python client.py -l
-        game_instances = {'tictactoe_game': TictactoeGame(3)}
-        self.game_field = game_instances[game_title]
+    def __init__(self, game_title, agent_port):
+        self.field = None  # field state of game board
 
-        self.host = '127.0.0.1'  # The server's hostname or IP address
-        self.port = 65431        # The port used by the server
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.clients = {}
+        thread_for_server = threading.Thread(
+            target=self.create_socket,
+            args=('127.0.0.1', 65431, 'server'))
+        thread_for_agent = threading.Thread(
+            target=self.create_socket,
+            args=('127.0.0.1', agent_port, 'agent'))
+        thread_for_server.start()
+        thread_for_agent.start()
+
+    # host: The server's hostname or IP address
+    # port: The port used by the server
+    def create_socket(self, host, port, socket_partner):
+        self.clients[socket_partner] = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
-        self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.client.settimeout(3)
+        self.clients[socket_partner].setsockopt(
+            socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        self.clients[socket_partner].settimeout(3)
         try:
-            self.client.connect((self.host, self.port))
+            self.clients[socket_partner].connect((host, port))
         except ConnectionRefusedError:
             print('Connection refused')
             exit(1)
 
-    def send_move(self, position):
+    def send_move(self):
+        # receive next move from agent
+        message_json = create_message_json(field=self.field, move=None)
+        self.clients['agent'].sendall(message_json.encode())
+        message = self.clients['agent'].recv(1024).decode()
+        next_move = read_message_json(message)['move']
+
+        # send next move to server
         try:
-            message_json = create_message_json(field=None, move=position)
-            self.client.sendall(message_json.encode())
+            message_json = create_message_json(field=None, move=next_move)
+            self.clients['server'].sendall(message_json.encode())
         except BrokenPipeError:
             print("Pipe broken")
             os._exit(1)
 
     def wait_for_my_turn(self):
-        message = self.client.recv(1024).decode()
+        message = self.clients['server'].recv(1024).decode()
         if message == '':
             print('[Client] Finished.')
             exit(0)
         # receive latest field data from server
-        self.game_field.field = read_message_json(message)['field']
+        self.field = read_message_json(message)['field']
 
     def join_game(self):
         while True:
-            time.sleep(0.1)
             # wait until receiving current field state
             self.wait_for_my_turn()
             # execute my turn
-            self.send_move(self.game_field.think())
+            self.send_move()
 
 
 def main():
@@ -68,6 +84,9 @@ def main():
                         help='set game title which you want to play')
     parser.add_argument('-l', '--list-games', action='store_true',
                         help='show all game titles which you can play')
+    parser.add_argument('--agent-port', default=65432,
+                        help='show all game titles which you can play')
+
     args = parser.parse_args()
 
     # show all game titles
@@ -76,7 +95,7 @@ def main():
         print(game_titles)
         exit(0)
 
-    client = Client(args.game)
+    client = Client(args.game, int(args.agent_port))
     client.join_game()
 
 
