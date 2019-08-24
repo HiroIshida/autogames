@@ -8,12 +8,20 @@ pids[$COUNT]=$!
 COUNT=$((COUNT+1))
 sleep 0.1
 # client1
-autogames_client --game tictactoe_game &
+python autogames/scripts/agents/tictactoe_game/agent.py --agent-port 65432 &
+pids[$COUNT]=$!
+COUNT=$((COUNT+1))
+sleep 0.1
+autogames_client --game tictactoe_game --agent-port 65432 &
 pids[$COUNT]=$!
 COUNT=$((COUNT+1))
 sleep 0.1
 # client2
-autogames_client --game tictactoe_game &
+python autogames/scripts/agents/tictactoe_game/agent.py --agent-port 65433 &
+pids[$COUNT]=$!
+COUNT=$((COUNT+1))
+sleep 0.1
+autogames_client --game tictactoe_game --agent-port 65433 &
 pids[$COUNT]=$!
 COUNT=$((COUNT+1))
 sleep 0.1

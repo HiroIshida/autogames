@@ -133,8 +133,3 @@ class TictactoeGame(GameManager, object):
                 if self.field[i][j] == 0:
                     available_positions.append([i, j])
         return available_positions
-
-    # Function for your original algorithm
-    # Think next position to win the game
-    def think(self):
-        return random.choice(self.available_positions())
