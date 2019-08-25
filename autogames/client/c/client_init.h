@@ -7,7 +7,6 @@
 #include <unistd.h>
 #include "json_utils.h"
 
-// int client_sockfd;
 int sockfd;
 char buf[1024];
 

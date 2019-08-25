@@ -1,9 +1,3 @@
-// if you cannot find json-c,
-// sudo apt install libjson-c-dev
-
-#include <stdio.h>
-#include <iconv.h>
-#include <json-c/json.h>
 #include "json_utils.h"
 
 // See: https://qiita.com/koara-local/items/2d3220cd1e2fce8ff267
@@ -14,10 +8,8 @@ void read_message_json(int **field_data, char* string) {
   json_object_object_foreach(json_obj, key, val) {
     if (json_object_is_type(val, json_type_array)) {
       if (strcmp(key, "field") == 0) {
-        // size_y = json_object_array_length(arr)
         for (int i = 0; i < json_object_array_length(val); ++i) {
           struct json_object *arr = json_object_array_get_idx(val, i);
-          // size_y = json_object_array_length(arr)
           for (int j = 0; j < json_object_array_length(arr); ++j) {
             struct json_object *element = json_object_array_get_idx(arr, j);
             field_data[i][j] = atoi(json_object_to_json_string(element));
@@ -30,8 +22,6 @@ void read_message_json(int **field_data, char* string) {
 
 // https://linuxprograms.wordpress.com/2010/08/19/json_object_array_add/
 void create_message_json(struct json_object *json_obj, int *next_move) {
-  /* // create new json object */
-  /* struct json_object *new_obj = json_object_new_object(); */
   // create json array
   struct json_object *json_move = json_object_new_array();
   // create json integer
@@ -40,10 +30,9 @@ void create_message_json(struct json_object *json_obj, int *next_move) {
   // add json integers to array
   json_object_array_add(json_move, j_x);
   json_object_array_add(json_move, j_y);
-  // form the json object
-  /* json_object_object_add(new_obj, "move", json_move); */
+  // add "move" key to the json
   json_object_object_add(json_obj, "move", json_move);
-
+  // add "field" key to the json
   struct json_object *json_field = json_object_new_array();
   json_object_object_add(json_obj, "field", json_field);
 }

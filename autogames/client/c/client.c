@@ -1,7 +1,3 @@
-// Compile
-// gcc -Wall -g -O2 -o agent-c agent.c -L /usr/lib/i386-linux-gnu -ljson-c; ./agent-c;
-// Execution
-
 #include "json_utils.h"
 #include "client_init.h"
 #include "agent.h"
@@ -27,7 +23,7 @@ int main(int argc, char* argv[]) {
   // socket communication
   int rsize;
   while( 1 ) {
-    // receive
+    // receive field information from server
     rsize = recv( sockfd, buf, sizeof( buf ), 0 );
     if ( rsize == 0 ) {
       printf("[C Client] Finished.\n");
@@ -35,14 +31,13 @@ int main(int argc, char* argv[]) {
     }
     usleep( 10 * 1000 ); // wait for 10[ms]
     read_message_json(field, buf);
-    // response
+    // think next move (main algorithm)
     think(next_move);
     struct json_object *new_obj = json_object_new_object();
     create_message_json(new_obj, next_move);
-    /* json_string = json_object_to_json_string(new_obj); */
     char *json_string = (char *)malloc(sizeof(char) * 1024);
     json_to_string(new_obj, &json_string);
-    /* json_string = json_object_to_json_string(new_obj); */
+    // send next move to server
     send( sockfd, json_string, rsize, 0);
   }
 
