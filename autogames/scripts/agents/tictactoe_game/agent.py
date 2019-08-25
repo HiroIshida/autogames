@@ -6,7 +6,6 @@ from __future__ import absolute_import
 
 import argparse
 from autogames.scripts.games import get_game_titles, create_message_json, read_message_json  # NOQA
-from autogames.scripts.games.tictactoe_game import TictactoeGame
 import random
 import socket
 
@@ -14,7 +13,6 @@ import socket
 class Agent:
 
     def __init__(self, agent_port):
-        self.game_field = TictactoeGame(3)
 
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         # reconnectable client
@@ -37,7 +35,7 @@ class Agent:
     # Write your own algorithm here
     def think(self):
         # Sample: random algorithm
-        return random.choice(self.game_field.available_positions())
+        return (random.randint(0, 2), random.randint(0, 2))
 
 
 def main():
@@ -56,7 +54,7 @@ def main():
             print('[Agent] Finished.')
             exit(0)
         dict_data = read_message_json(message)
-        agent.game_field.field = dict_data["field"]
+        agent.field = dict_data["field"]
         # main algorithm
         next_move = agent.think()
         # send next move
