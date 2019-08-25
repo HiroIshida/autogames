@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
     rsize = recv( sockfd, buf, sizeof( buf ), 0 );
     if ( rsize == 0 ) {
       printf("[C Client] Finished.\n");
-      return 0;
+      break;
     }
     usleep( 10 * 1000 ); // wait for 10[ms]
     read_message_json(field, buf);
