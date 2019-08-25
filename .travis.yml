@@ -21,6 +21,8 @@ script:
   - python autogames/test/check_tictactoe.py
   # check if player_manager works correctly
   - python autogames/test/check_game_manager.py
+  # check if C client program can be compiled
+  - ./autogames/test/check_c_compile.sh
   # check if server and client works correctly
   - ./autogames/test/check_server_and_client.sh
 
