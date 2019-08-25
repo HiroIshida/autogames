@@ -15,7 +15,7 @@ setup(
     install_requires=open('requirements.txt').readlines(),
     entry_points={'console_scripts':
                   ['autogames_server='
-                   'autogames.scripts.server:main',
+                   'autogames.server.server:main',
                    'autogames_client='
-                   'autogames.scripts.client:main']},
+                   'autogames.client.python.client:main']},
 )

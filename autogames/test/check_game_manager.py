@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from autogames.scripts.games.game_manager import GameManager
+from autogames.server.games.game_manager import GameManager
 
 player0 = ('1271,0.0.1', 00000)  # dummy address and port
 player1 = ('1271,0.0.1', 11111)  # dummy address and port
