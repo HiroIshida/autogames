@@ -6,7 +6,7 @@ python:
 
 addons:
   apt:
-    package:
+    packages:
       - libjson-c-dev
 
 install:
