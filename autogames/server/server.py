@@ -7,7 +7,7 @@
 from __future__ import absolute_import
 
 import argparse
-from autogames.server.games import get_game_titles, create_message_json, read_message_json  # NOQA
+from autogames import get_game_titles, create_message_json, read_message_json  # NOQA
 from autogames.server.games.tictactoe_game import TictactoeGame
 import os
 import socket
