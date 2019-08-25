@@ -1,11 +1,9 @@
 #!/bin/bash
 
 COUNT=0
-SCRIPTS=("autogames_server --game tictactoe_game &" # server
-         "python autogames/client/python/agent.py --agent-port 65432 &" # agent for client1
-         "autogames_client --game tictactoe_game --agent-port 65432 &" # client1
-         "python autogames/client/python/agent.py --agent-port 65433 &" # agent for client2
-         "autogames_client --game tictactoe_game --agent-port 65433 &" # client2
+SCRIPTS=("autogames_server --game tictactoe_game --port 65432&" # server
+         "autogames_client --port 65432 &" # client1
+         "autogames_client --port 65432 &" # client2
         )
 
 for ((i = 0; i < ${#SCRIPTS[@]}; i++))
