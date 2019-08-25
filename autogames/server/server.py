@@ -17,7 +17,7 @@ import time
 
 class Server:
 
-    def __init__(self, game_title):
+    def __init__(self, game_title, host_port):
         # you can see available game list by command below
         # python server.py --list-games or python server.py -l
         game_instances = {'tictactoe_game': TictactoeGame(3)}
@@ -31,9 +31,9 @@ class Server:
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        HOST = '127.0.0.1'
-        PORT = 65431
-        self.sock.bind((HOST, PORT))
+        host = '127.0.0.1'
+        port = host_port
+        self.sock.bind((host, port))
         self.sock.listen(2)
 
     def wait_for_opponents(self, player_number):
@@ -88,6 +88,8 @@ def main():
                         help='set game title which you want to play')
     parser.add_argument('-l', '--list-games', action='store_true',
                         help='show all game titles which you can play')
+    parser.add_argument('--port', default=65431,
+                        help='The port address used by the server')
     args = parser.parse_args()
 
     # show all game titles
@@ -97,7 +99,7 @@ def main():
         exit(0)
 
     # start game server
-    server = Server(args.game)
+    server = Server(args.game, int(args.port))
     while True:
         try:
             # wait for clients to join this game
