@@ -2,8 +2,8 @@
 
 COUNT=0
 SCRIPTS=("autogames_server --game tictactoe_game --port 65432 &" # server
-         "cd autogames/client/c/; gcc -Wall -g -O2 -o client agent.c client.c client_init.c json_utils.c -L /usr/lib/i386-linux-gnu -ljson-c; cd -; ./autogames/client/c/client 65432 &" # client1
-         "autogames_client --port 65432 &" # client2
+         "cd autogames/client/c/; gcc -Wall -g -O2 -o client-c agent.c client.c client_init.c json_utils.c -L /usr/lib/i386-linux-gnu -ljson-c; cd -; ./autogames/client/c/client-c 65432 &" # client with C
+         "autogames_client --port 65432 &" # client with Python
         )
 
 for ((i = 0; i < ${#SCRIPTS[@]}; i++))
