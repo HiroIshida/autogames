@@ -14,11 +14,11 @@ int main(int argc, char* argv[]) {
 
   client_init(argv[1]);
 
-  // MEMO: do not forget to free(field)
+  // NOTE: very big board is not assumued (max size: 100*100 board)
   int i;
-  int size_x = 3;
-  int size_y = 3;
-  // TODO: size_x and size_y should be set dynamically
+  int size_x = 100;
+  int size_y = 100;
+  int **field; // field state of the game
   field = malloc(sizeof(int *) * size_x);
   for (i=0;i<size_x;i++) {
     field[i] = malloc(sizeof(int) * size_y);
@@ -48,6 +48,8 @@ int main(int argc, char* argv[]) {
 
   // close socket
   close( sockfd );
+  // release memory
+  free(field);
 
   return 0;
 }
