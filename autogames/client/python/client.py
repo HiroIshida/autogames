@@ -41,7 +41,7 @@ class Client:
     def wait_for_my_turn(self):
         message = self.client.recv(1024).decode()
         if message == '':
-            print('[Client] Finished.')
+            print('[Python Client] Finished.')
             exit(0)
         # receive latest field data from server
         self.agent.field = read_message_json(message)['field']

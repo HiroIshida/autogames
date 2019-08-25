@@ -1,8 +1,8 @@
 #!/bin/bash
 
 COUNT=0
-SCRIPTS=("autogames_server --game tictactoe_game --port 65432&" # server
-         "autogames_client --port 65432 &" # client1
+SCRIPTS=("autogames_server --game tictactoe_game --port 65432 &" # server
+         "cd autogames/client/c/; gcc -Wall -g -O2 -o client agent.c client.c client_init.c json_utils.c -L /usr/lib/i386-linux-gnu -ljson-c; cd -; ./autogames/client/c/client 65432 &" # client1
          "autogames_client --port 65432 &" # client2
         )
 

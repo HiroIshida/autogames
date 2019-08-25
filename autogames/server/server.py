@@ -56,6 +56,9 @@ class Server:
     def next_move_from_player(self, connection, player_number):
         bin_data = connection.recv(1024)
         message = bin_data.decode()
+        message = bin_data.decode('UTF-8')
+        # remove null. To checkout, let's print(list(message))
+        message = message.strip('\r\n\0')
         dict_data = read_message_json(message)
         state = self.game_field.put(player_number, dict_data["move"])
         return state
