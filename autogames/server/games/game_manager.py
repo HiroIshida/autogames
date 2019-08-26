@@ -36,6 +36,7 @@ class GameManager:
         # return True if the player put the piece, vice versa
         return (is_put, message)
 
+    # You should be override this function in child class
     def puttable(self, position):
         x = position[0]
         y = position[1]
@@ -47,6 +48,7 @@ class GameManager:
             return False
         return True
 
+    # You should be override this function in child class
     def available_positions(self, player_number):
         available_positions = []
         for i in range(self.dim):
@@ -55,6 +57,10 @@ class GameManager:
                 if self.puttable([i, j]):
                     available_positions.append([i, j])
         return available_positions
+
+    # You should be override this function in child class
+    def _check_checkmate(self, player_number):
+        return (len(self.available_positions(player_number)) == 0, '')
 
     def add_player(self):
         print("new player is set")
