@@ -4,9 +4,9 @@
 # for python2 to use absolute path (python3 uses absolute path by default)
 from __future__ import absolute_import
 
-from autogames.client.python.agent import Agent
 import argparse
 from autogames import get_game_titles, create_message_json, read_message_json  # NOQA
+from importlib import import_module
 import os
 import socket
 import time
@@ -14,8 +14,10 @@ import time
 
 class Client:
 
-    def __init__(self, host_port):
-        self.agent = Agent()  # game agent
+    def __init__(self, host_port, agent_file):
+        # import agent
+        agent = import_module("autogames.client.python." + agent_file)
+        self.agent = agent.Agent()  # game agent
 
         host = '127.0.0.1'  # The server's hostname or IP address
         port = host_port   # The port used by the server
@@ -52,10 +54,12 @@ def main():
     parser = argparse.ArgumentParser(description='description of server.py')
     parser.add_argument('--port', default=65431,
                         help='The port address used by the server')
+    parser.add_argument('--agent-file', default='agent',
+                        help='The file name which contains Agent class')
     args = parser.parse_args()
 
     # join and play the game
-    client = Client(int(args.port))
+    client = Client(int(args.port), args.agent_file)
     while True:
         time.sleep(0.1)
         # wait until receiving current field state
