@@ -9,6 +9,7 @@ from __future__ import absolute_import
 import argparse
 from autogames import get_game_titles, create_message_json, read_message_json  # NOQA
 from autogames.server.games.tictactoe_game import TictactoeGame
+from autogames.server.games.othello_game import OthelloGame
 import os
 import socket
 import threading
@@ -20,7 +21,8 @@ class Server:
     def __init__(self, game_title, host_port):
         # you can see available game list by command below
         # python server.py --list-games or python server.py -l
-        game_instances = {'tictactoe_game': TictactoeGame(3)}
+        game_instances = {'tictactoe_game': TictactoeGame(3),
+                          'othello_game': OthelloGame(8)}
         self.game_field = game_instances[game_title]
 
         self.client_list = []
@@ -65,15 +67,20 @@ class Server:
     def call_and_response(self, connection, player_number):
         # wait for the other players to finish their turns
         self.wait_for_opponents(player_number)
+        # send current field to clientand then the client starts the turn
+        # repeat call_and_response until client send the valid move
         while True:
-            # send current field to client (and then the client starts the turn)
             self.call_next_player(connection)
             # receive input from client
             next_move = self.next_move_from_player(connection)
             available_positions = self.game_field.available_positions(
                 player_number)
+            if len(available_positions) == 0:
+                break
             if next_move in available_positions:
                 break
+            else:
+                print('player{}: invalid input!'.format(player_number))
         # put next_move to the game field
         current_state = self.game_field.put(player_number, next_move)
         if current_state[0] is True:  # if the turn is successfully end
@@ -81,23 +88,21 @@ class Server:
             print(self.game_field.show_field())
         else:
             print("player{} pass the turn".format(player_number))
-        return current_state
 
     def connection_loop_with_client(self, connections, player_numbers):
-        # move_players: player list who ends his turn
-        move_players = [True] * self.game_field.N_player
         # start game
         is_checkmate = False
         while not is_checkmate:
             for (conn, player_number) in zip(connections, player_numbers):
                 if is_checkmate:
                     break  # this is to avoid calling self.call_and_response()
-                current_state = self.call_and_response(conn, player_number)
-                move_players[player_number - 1] = current_state[0]
+                self.call_and_response(conn, player_number)
                 # check whether game is end
+                is_checkmate_list = []  # check checkmate state of each player
                 for player_num in self.game_field.player_numbers:
                     result = self.game_field._check_checkmate(player_num)
-                    is_checkmate = (is_checkmate or result[0])
+                    is_checkmate_list.append(result[0])
+                is_checkmate = all(is_checkmate_list)
         # end game
         for player_num in self.game_field.player_numbers:
             result = self.game_field._check_checkmate(player_num)
@@ -147,6 +152,7 @@ def main():
     connections = []
     for client in server.client_list:
         connections.append(client[0])
+
     server.connection_loop_with_client(
         connections, server.game_field.player_numbers)
     server.sock.close()
