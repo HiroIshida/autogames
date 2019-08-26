@@ -25,5 +25,7 @@ script:
   - ./autogames/test/check_c_compile.sh
   # check if server and client works correctly
   - ./autogames/test/check_server_and_client.sh
+  # check if othello game with server and client works correctly
+  - ./autogames/test/check_othello_server.sh
 
 sudo: false
