@@ -53,39 +53,58 @@ class Server:
             field=self.game_field.field, move=None)
         connection.sendall(message_json.encode())
 
-    def next_move_from_player(self, connection, player_number):
+    def next_move_from_player(self, connection):
         bin_data = connection.recv(1024)
         message = bin_data.decode()
         message = bin_data.decode('UTF-8')
         # remove null. To checkout, let's print(list(message))
         message = message.strip('\r\n\0')
         dict_data = read_message_json(message)
-        state = self.game_field.put(player_number, dict_data["move"])
-        return state
+        return dict_data["move"]
 
     def call_and_response(self, connection, player_number):
         # wait for the other players to finish their turns
         self.wait_for_opponents(player_number)
-        # send current field to client (and then the client starts the turn)
-        self.call_next_player(connection)
-        # receive input from client
-        current_state = self.next_move_from_player(
-            connection, player_number)
-        print("player{}'s turn is end".format(player_number))
-        print(self.game_field.show_field())
-
+        while True:
+            # send current field to client (and then the client starts the turn)
+            self.call_next_player(connection)
+            # receive input from client
+            next_move = self.next_move_from_player(connection)
+            available_positions = self.game_field.available_positions(
+                player_number)
+            if next_move in available_positions:
+                break
+        # put next_move to the game field
+        current_state = self.game_field.put(player_number, next_move)
+        if current_state[0] is True:  # if the turn is successfully end
+            print("player{}'s turn is end".format(player_number))
+            print(self.game_field.show_field())
+        else:
+            print("player{} pass the turn".format(player_number))
         return current_state
 
     def connection_loop_with_client(self, connections, player_numbers):
-        while True:
+        # move_players: player list who ends his turn
+        move_players = [True] * self.game_field.N_player
+        # start game
+        is_checkmate = False
+        while not is_checkmate:
             for (conn, player_number) in zip(connections, player_numbers):
+                if is_checkmate:
+                    break  # this is to avoid calling self.call_and_response()
                 current_state = self.call_and_response(conn, player_number)
-                # Game is end
-                if current_state[0] is False:
-                    print(current_state[1])  # player-n win
-                    print('[Server] Finished.')
-                    self.sock.close()
-                    os._exit(0)
+                move_players[player_number - 1] = current_state[0]
+                # check whether game is end
+                for player_num in self.game_field.player_numbers:
+                    result = self.game_field._check_checkmate(player_num)
+                    is_checkmate = (is_checkmate or result[0])
+        # end game
+        for player_num in self.game_field.player_numbers:
+            result = self.game_field._check_checkmate(player_num)
+            print(result[1])
+        print('[Server] Finished.')
+        self.sock.close()
+        os._exit(0)
 
 
 def main():
