@@ -21,9 +21,6 @@ script:
   # check game_manager.py
   - python autogames/test/check_game_manager.py
 
-  # check server.py and client.py
-  - ./autogames/test/check_server_and_clients.sh
-
   # check games
   # tictactoe
   - python autogames/test/games/tictactoe/check_tictactoe_game.py
@@ -36,5 +33,7 @@ script:
   # C
   - ./autogames/test/c/check_c_compile.sh
   - ./autogames/test/c/check_c_clients.sh
+  # Python
+  - ./autogames/test/python/check_python_clients.sh
 
 sudo: false
