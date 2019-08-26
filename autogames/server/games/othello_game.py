@@ -13,10 +13,10 @@ class OthelloGame(GameManager, object):
             return 1
         super(OthelloGame, self).__init__(N_player=2, dim=dim)  # 2 player game
         # set initial field
-        self.field[dim/2 - 1][dim/2 - 1] = 1
-        self.field[dim/2][dim/2] = 1
-        self.field[dim/2 - 1][dim/2] = -1
-        self.field[dim/2][dim/2 - 1] = -1
+        self.field[dim//2 - 1][dim//2 - 1] = 1
+        self.field[dim//2][dim//2] = 1
+        self.field[dim//2 - 1][dim//2] = -1
+        self.field[dim//2][dim//2 - 1] = -1
 
         self.stones = {}
         self.stones[1] = 1   # player1 use stone1
