@@ -22,7 +22,7 @@ script:
   - python autogames/test/check_game_manager.py
 
   # check server.py and client.py
-  - ./autogames/test/check_server_and_client.sh
+  - ./autogames/test/check_server_and_clients.sh
 
   # check games
   # tictactoe
