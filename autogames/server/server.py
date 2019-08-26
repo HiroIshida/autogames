@@ -63,22 +63,29 @@ class Server:
         state = self.game_field.put(player_number, dict_data["move"])
         return state
 
-    def connection_loop_with_client(self, connection, player_number):
+    def call_and_response(self, connection, player_number):
+        # wait for the other players to finish their turns
+        self.wait_for_opponents(player_number)
+        # send current field to client (and then the client starts the turn)
+        self.call_next_player(connection)
+        # receive input from client
+        current_state = self.next_move_from_player(
+            connection, player_number)
+        print("player{}'s turn is end".format(player_number))
+        print(self.game_field.show_field())
+
+        return current_state
+
+    def connection_loop_with_client(self, connections, player_numbers):
         while True:
-            # wait for opponents to finish the turns
-            self.wait_for_opponents(player_number)
-            # send current field to client
-            self.call_next_player(connection)
-            # receive input from client
-            current_state = self.next_move_from_player(
-                connection, player_number)
-            print(self.game_field.show_field())
-            # Game is end
-            if current_state[0] is False:
-                print(current_state[1])  # player-n win
-                print('[Server] Finished.')
-                self.sock.close()
-                os._exit(0)
+            for (conn, player_number) in zip(connections, player_numbers):
+                current_state = self.call_and_response(conn, player_number)
+                # Game is end
+                if current_state[0] is False:
+                    print(current_state[1])  # player-n win
+                    print('[Server] Finished.')
+                    self.sock.close()
+                    os._exit(0)
 
 
 def main():
@@ -103,7 +110,7 @@ def main():
 
     # start game server
     server = Server(args.game, int(args.port))
-    while True:
+    while len(server.client_list) < server.game_field.N_player:
         try:
             # wait for clients to join this game
             conn, addr = server.sock.accept()
@@ -116,12 +123,13 @@ def main():
         isNewPlayerAccepted = state[0]
         if isNewPlayerAccepted:
             server.client_list.append((conn, addr))
-            thread = threading.Thread(
-                # len(server.client_list) means player_number
-                target=server.connection_loop_with_client,
-                args=(conn, len(server.client_list)))
-            # thread to communicate with each client
-            thread.start()
+            print("add new player")
+
+    connections = []
+    for client in server.client_list:
+        connections.append(client[0])
+    server.connection_loop_with_client(
+        connections, server.game_field.player_numbers)
     server.sock.close()
 
 

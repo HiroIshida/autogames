@@ -14,6 +14,7 @@ game_field.add_player()
 count = 0
 for i in range(3):
     for j in range(3):
+        print(game_field.show_field())
         game_field.put(players[count % 2], [i, j])
         count += 1
 
