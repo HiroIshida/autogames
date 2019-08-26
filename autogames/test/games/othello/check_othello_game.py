@@ -13,15 +13,24 @@ game_field.add_player()
 game_field.add_player()
 
 count = 0
+checkmates = [False, False]  # checkmate state for each player
 while True:
     player_number = players[count % 2]
     available_positions = game_field.available_positions(player_number)
-    if len(available_positions) == 0:
-        break
+    is_checkmate = game_field._check_checkmate(player_number)
+    # pass
+    if is_checkmate[0]:
+        game_field.go_next_turn()
+        checkmates[count % 2] = True
+    # put stone
     else:
         print(game_field.show_field())
         game_field.put(player_number, random.choice(available_positions))
-        count += 1
+        checkmates[count % 2] = False
+    count += 1
+    # game end
+    if all(checkmates):
+        break
 
 print(game_field.show_field())
 result1 = game_field._check_checkmate(players[0])
