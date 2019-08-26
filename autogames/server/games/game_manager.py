@@ -12,21 +12,16 @@ class GameManager:
     # piece means 'koma' or 'stone'
     def _put(self, player_number, position, piece):
         # return from this method if invalid operation is executed
-        x = position[0]
-        y = position[1]
-        if position not in self.available_positions():
-            if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
-                print("out of the game field")
-            else:
-                print("there is already a stone here")
-            return(True, 'Invalid operation !')
+        if not self.puttable(position):
+            return(True, "invalid operation")
 
         current_turn_player = self.whos_turn()
-
         if not player_number == current_turn_player:
             return (True, "please wait your opponent for finishing the turn")
 
         # put a stone;
+        x = position[0]
+        y = position[1]
         self.field[x][y] = piece
 
         # check checkmate
@@ -37,6 +32,17 @@ class GameManager:
         if not isGameEnd:
             self.go_next_turn()
         return (not isGameEnd, message)
+
+    def puttable(self, position):
+        x = position[0]
+        y = position[1]
+        if x < 0 or x >= self.dim or y < 0 or y >= self.dim:
+            print('out of the game field')
+            return False
+        elif self.field[x][y] != 0:
+            print('there is already a stone here')
+            return False
+        return True
 
     def add_player(self):
         print("new player is set")
@@ -68,10 +74,6 @@ class GameManager:
 
     # @abstractmethod
     def get_field(self):
-        pass
-
-    # @abstractmethod
-    def check_checkmate_field(self, player_number):
         pass
 
     # @abstractmethod
