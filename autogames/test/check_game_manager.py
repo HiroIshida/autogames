@@ -20,7 +20,7 @@ def eq_address(ad1, ad2):  # TODO: must be in utils
 
 def test_add_player():
     print("test_add_player")
-    gm = GameManager(N_player)
+    gm = GameManager(N_player, 3)
     for n in range(N_player):
         gm.add_player()
 
@@ -30,7 +30,7 @@ def test_add_player():
 
 def test_whos_turn_and_go_next_turn():
     print("test_whos_turn_and_go_next_turn")
-    gm = GameManager(N_player)
+    gm = GameManager(N_player, 3)
     for n in range(N_player):
         gm.add_player()
 
