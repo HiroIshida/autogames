@@ -18,7 +18,10 @@ class TictactoeGame(GameManager, object):
         except KeyError:
             # please wait for opponent to login
             return(True, player_number[1])
-
+        # check position is available
+        if not self.puttable(position):
+            return(True, 'Invalid operation !')
+        # put stone
         return super(TictactoeGame, self)._put(
             player_number=player_number, position=position, piece=stone)
 
@@ -98,11 +101,14 @@ class TictactoeGame(GameManager, object):
 
         return (False, message_inprogress)
 
+    def puttable(self, position):
+        return super(TictactoeGame, self).puttable(position)
+
     def available_positions(self):
         available_positions = []
         for i in range(self.dim):
             for j in range(self.dim):
                 # invalid operation
-                if self.field[i][j] == 0:
+                if self.puttable([i, j]):
                     available_positions.append([i, j])
         return available_positions
