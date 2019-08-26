@@ -13,25 +13,26 @@ class GameManager:
     def _put(self, player_number, position, piece):
         puttable = self.puttable(position)
         right_player = (player_number == self.whos_turn())
+        is_put = False  # whether the player successfully put the piece
         # return from this method if invalid operation is executed
         if puttable and right_player:
             # put a stone;
             x = position[0]
             y = position[1]
             self.field[x][y] = piece
+            is_put = True
         if not puttable:
+            is_put = False
             print("you cannot put stone here.")
         if not right_player:
+            is_put = False
             print("please wait your opponent for finishing the turn")
 
         # check checkmate
         result = self._check_checkmate(player_number)
-        isGameEnd = result[0]
         message = result[1]
-
-        if not isGameEnd:
-            self.go_next_turn()
-        return (not isGameEnd, message)
+        self.go_next_turn()
+        return (is_put, message)
 
     def puttable(self, position):
         x = position[0]
@@ -43,6 +44,15 @@ class GameManager:
             # print('there is already a stone here')
             return False
         return True
+
+    def available_positions(self, player_number):
+        available_positions = []
+        for i in range(self.dim):
+            for j in range(self.dim):
+                # invalid operation
+                if self.puttable([i, j]):
+                    available_positions.append([i, j])
+        return available_positions
 
     def add_player(self):
         print("new player is set")
