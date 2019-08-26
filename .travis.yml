@@ -17,15 +17,24 @@ install:
 script:
   # check python format
   - autopep8 -r . --diff --exit-code
-  # check if game works correctly
-  - python autogames/test/check_tictactoe.py
-  # check if player_manager works correctly
+
+  # check game_manager.py
   - python autogames/test/check_game_manager.py
-  # check if C client program can be compiled
-  - ./autogames/test/check_c_compile.sh
-  # check if server and client works correctly
+
+  # check server.py and client.py
   - ./autogames/test/check_server_and_client.sh
-  # check if othello game with server and client works correctly
-  - ./autogames/test/check_othello_server.sh
+
+  # check games
+  # tictactoe
+  - python autogames/test/games/tictactoe/check_tictactoe_game.py
+  - ./autogames/test/games/tictactoe/check_tictactoe_with_clients.sh
+  # othello
+  - python autogames/test/games/othello/check_othello_game.py
+  - ./autogames/test/games/othello/check_othello_with_clients.sh
+
+  # check clients of each language
+  # C
+  - ./autogames/test/c/check_c_compile.sh
+  - ./autogames/test/c/check_c_clients.sh
 
 sudo: false
