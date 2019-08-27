@@ -10,7 +10,7 @@ setup(
     long_description=open('README.md').read(),
     url='https://github.com/HiroIshida/tictoctoe',
     author='Hiro Ishida & Naoya Yamaguchi',
-    author_email='h-ishida@jsk.imi.i.u-tokyo.ac.jp',
+    author_email='h-ishida@jsk.imi.i.u-tokyo.ac.jp & yamaguchi@jsk.imi.i.u-tokyo.ac.jp',
     license='MIT',
     install_requires=open('requirements.txt').readlines(),
     entry_points={'console_scripts':
