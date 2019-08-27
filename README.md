@@ -50,8 +50,9 @@ sleep 0.3
 python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello --timeout 30 &
 sleep 0.3
 # human player (you)
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30
 ```
+or you can type `./autogames/test/check_human_mode.sh`
 
 # Usage
 ### Where should I write
@@ -93,7 +94,7 @@ cd -;
 ##### Human mode
 ```bash
 # human mode. You can play game interactively.
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30
 ```
 NOTE: In the human mode, you should make timeout arguments in the both client longer, because human thinks for longer time than computers.
 
