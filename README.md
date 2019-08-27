@@ -106,11 +106,12 @@ NOTE: In the human mode, you should make timeout arguments in the both client lo
     2|X|O|X|
    ```
    - （言語間で名前が統一された）変数や関数の用途を説明する
+   - どういう情報をsocket通信したらよいかを説明する（？）。ユーザ向けではないが。
    - JSON style used in socket communication (for developer)
    ```
    {"field": [[0, 0, 0], [0, 0, 0], [0, 0, 0]], "move": null}
    ```
-   - どういう情報をsocket通信したらよいかを説明する（？）。ユーザ向けではないが。
+   - これは、実際にtest.jsonを作ってどこかのディレクトリに置き、travisのテストに利用したほうがいいかも。
 
 ### Othello
    - オセロ、リバーシ(othello game)
@@ -129,6 +130,7 @@ NOTE: In the human mode, you should make timeout arguments in the both client lo
    ```
    {"field": [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, -1, 0, 0, 0], [0, 0, 0, -1, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]], "move": null}
    ```
+   - これは、実際にtest.jsonを作ってどこかのディレクトリに置き、travisのテストに利用したほうがいいかも。
 
 # Available environments
 ### OS
