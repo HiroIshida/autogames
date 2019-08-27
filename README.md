@@ -106,7 +106,11 @@ NOTE: In the human mode, you should make timeout arguments in the both client lo
     2|X|O|X|
    ```
    - （言語間で名前が統一された）変数や関数の用途を説明する
-   - 通信するjsonの中身を貼り、どういう情報をsocket通信したらよいかを説明する。(jsonは全ゲーム共通か？)
+   - JSON style used in socket communication (for developer)
+   ```
+   {"field": [[0, 0, 0], [0, 0, 0], [0, 0, 0]], "move": null}
+   ```
+   - どういう情報をsocket通信したらよいかを説明する（？）。ユーザ向けではないが。
 
 ### Othello
    - オセロ、リバーシ(othello game)
@@ -120,6 +124,10 @@ NOTE: In the human mode, you should make timeout arguments in the both client lo
     5| | | | | | | | |
     6| | | | | | | | |
     7| | | | | | | | |
+   ```
+   - Json style used in socket communication (for developer)
+   ```
+   {"field": [[0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 1, -1, 0, 0, 0], [0, 0, 0, -1, 1, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0]], "move": null}
    ```
 
 # Available environments
