@@ -34,20 +34,25 @@ For example, you can try othello demo. Two computer agents automatically fight a
 ```bash
 # server of othello game
 autogames_server --game othello_game --port 65432 &
+sleep 0.3
 # computer player1 with Python
 python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
-# player2 with Python
+sleep 0.3
+# computer player2 with Python
 python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
 ```
 You can fight against computer agents as a player.
 ```bash
 # server of othello game
 autogames_server --game othello_game --port 65432 &
+sleep 0.3
 # computer player with Python
-python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
+python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello --timeout 30 &
+sleep 0.3
 # human player (you)
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30
 ```
+or you can type `./autogames/test/check_human_mode.sh`
 
 # Usage
 ### Where should I write
@@ -64,8 +69,9 @@ To fight clients in localhost, you can create your opponents. You can also call 
 ```bash
 # game server. you can list up game types (GAME_TYPE) by autogames_server --list
 autogames_server --game (GAME_TYPE) --port 65432 &
+sleep 0.3
 # computer player. AGENT_FLIE is the file name in agents dir (e.g. example_agent_othello)
-python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) --timeout 3 &
+python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) &
 ```
 
 Then, you can create your agent.
@@ -88,8 +94,9 @@ cd -;
 ##### Human mode
 ```bash
 # human mode. You can play game interactively.
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30
 ```
+NOTE: In the human mode, you should make timeout arguments in the both client longer, because human thinks for longer time than computers.
 
 # Available games
 ### tictactoe

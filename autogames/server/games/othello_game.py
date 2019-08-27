@@ -21,6 +21,8 @@ class OthelloGame(GameManager, object):
         self.stones = {}
         self.stones[1] = 1   # player1 use stone1
         self.stones[2] = -1  # player2 use stone-1
+        print('player1: X')
+        print('player2: O')
 
     def put(self, player_number, position):
         try:
