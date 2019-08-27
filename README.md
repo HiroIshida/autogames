@@ -6,11 +6,11 @@
  - [Install](#install)
  - [Example](#example)
  - [Usage](#usage)
-   - [Where should I write](#where-should-i-write)
-   - [Fight in localhost](#fight-in-localhost)
-    - [Python](#python)
-    - [C](#c)
-    - [Human mode](#human-mode)
+   - [Where should I write?](#where-should-i-write-)
+   - [Start game](#start-game)
+     - [Python](#python)
+     - [C](#c)
+     - [Human mode](#human-mode)
  - [Available games](#available-games)
    - [tictactoe](#tictactoe)
    - [Othello](#othello)
@@ -55,7 +55,7 @@ python autogames/client/python/client.py --port 65432 --agent-file human_agent -
 or you can type `./autogames/test/check_human_mode.sh`
 
 # Usage
-### Where should I write
+### Where should I write?
 You can use `think` function in autogames/client/(LANGUAGE)/agents/(AGENT_FLIE) for the main function of game algorithm
 
 Example implementation of othello agent is like below. (`autogames/client/python/agents/example_agent_tictactoe.py`)
@@ -64,21 +64,19 @@ def think(self):
     return (random.randint(0, 2), random.randint(0, 2))
 ```
 
-### Fight in localhost
-To fight clients in localhost, you can create your opponents. You can also call these commands in different terminals.
+### Start game
+
+First, you create game server. (You can call the commands below in eigher single or different terminals.)
 ```bash
-# game server. you can list up game types (GAME_TYPE) by autogames_server --list
+# Start game server. you can list up game types (GAME_TYPE) by autogames_server --list
 autogames_server --game (GAME_TYPE) --port 65432 &
-sleep 0.3
-# computer player. AGENT_FLIE is the file name in agents dir (e.g. example_agent_othello)
-python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) &
 ```
 
-Then, you can create your agent.
-##### Python
+Then, you can create game agent with many languages.
+##### Python (recommended)
 ```bash
-# your agent
-python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) --timeout 3 &
+# Create game player. AGENT_FLIE is the file name in agents dir (e.g. example_agent_othello)
+python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) &
 ```
 ##### C
 ```bash
