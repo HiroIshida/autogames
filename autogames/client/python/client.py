@@ -14,7 +14,7 @@ import time
 
 class Client:
 
-    def __init__(self, host_port, agent_file):
+    def __init__(self, host_port, agent_file, timeout):
         # import agent
         agent = import_module("autogames.client.python." + agent_file)
         self.agent = agent.Agent()  # game agent
@@ -25,7 +25,7 @@ class Client:
         # reconnectable client
         # https://qiita.com/shino_312/items/3c81ed8d8dfd0d53f25a
         self.client.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-        self.client.settimeout(3)
+        self.client.settimeout(timeout)
         self.client.connect((host, port))
 
     def send_move(self):
@@ -56,10 +56,12 @@ def main():
                         help='The port address used by the server')
     parser.add_argument('--agent-file', default='agent',
                         help='The file name which contains Agent class')
+    parser.add_argument('--timeout', default='3',
+                        help='timeout of client input')
     args = parser.parse_args()
 
     # join and play the game
-    client = Client(int(args.port), args.agent_file)
+    client = Client(int(args.port), args.agent_file, int(args.timeout))
     while True:
         time.sleep(0.1)
         # wait until receiving current field state

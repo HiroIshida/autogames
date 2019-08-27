@@ -91,6 +91,8 @@ class Server:
 
     def connection_loop_with_client(self, connections, player_numbers):
         # start game
+        print('Game start')
+        print(self.game_field.show_field())
         is_checkmate = False
         while not is_checkmate:
             for (conn, player_number) in zip(connections, player_numbers):

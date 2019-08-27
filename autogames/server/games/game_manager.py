@@ -62,9 +62,27 @@ class GameManager:
     def _check_checkmate(self, player_number):
         return (len(self.available_positions(player_number)) == 0, '')
 
-    def add_player(self):
-        print("new player is set")
+    # You should be override this function in child class
+    def show_field(self):
+        y_str_line = " "
+        for x in range(self.dim):
+            y_str_line += " {}".format(x)
+        y_str_line += "\n"
+        for y in range(self.dim):
+            x_str_line = "{}|".format(y)
+            for x in range(self.dim):
+                stone = self.field[x][y]
+                if stone == 0:
+                    str_stone = " |"
+                else:
+                    str_stone = "X|"
+                x_str_line += str_stone
 
+            y_str_line += (x_str_line + "\n")
+        return y_str_line
+
+    def add_player(self):
+        # print("new player is set")
         if self._isGameStart():
             return (False, "add_player: you can't join the game")
 
