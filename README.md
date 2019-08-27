@@ -1,5 +1,7 @@
 # Autogames
 
+[![Build Status](https://travis-ci.com/HiroIshida/autogames.svg?token=9fpkKj6dzfmzwRd4k3Gq&branch=master)](https://travis-ci.com/HiroIshida/autogames/)
+
  - [Overview](#overview)
  - [Install](#install)
  - [Example](#example)
