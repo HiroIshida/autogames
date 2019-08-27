@@ -16,7 +16,7 @@ class Client:
 
     def __init__(self, host_port, agent_file, timeout):
         # import agent
-        agent = import_module("autogames.client.python." + agent_file)
+        agent = import_module("autogames.client.python.agents." + agent_file)
         self.agent = agent.Agent()  # game agent
 
         host = '127.0.0.1'  # The server's hostname or IP address

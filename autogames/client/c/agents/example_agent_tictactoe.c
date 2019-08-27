@@ -1,4 +1,4 @@
-#include "agent.h"
+#include "../includes/agent.h"
 
 void think(int *move) {
   move[0] = rand() % 3;

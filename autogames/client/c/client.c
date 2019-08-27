@@ -1,6 +1,6 @@
-#include "json_utils.h"
-#include "client_init.h"
-#include "agent.h"
+#include "includes/json_utils.h"
+#include "includes/client_init.h"
+#include "includes/agent.h"
 
 int main(int argc, char* argv[]) {
   if ( argc != 2) {
