@@ -26,9 +26,12 @@ class TictactoeGame(GameManager, object):
             player_number=player_number, position=position, piece=stone)
 
     def show_field(self):
-        y_str_line = ""
+        y_str_line = " "
+        for x in range(self.dim):
+            y_str_line += " {}".format(x)
+        y_str_line += "\n"
         for y in range(self.dim):
-            x_str_line = "|"
+            x_str_line = "{}|".format(y)
             for x in range(self.dim):
                 stone = self.field[x][y]
                 if stone == 0:
