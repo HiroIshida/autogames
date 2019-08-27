@@ -31,48 +31,64 @@ pip install --user .
 
 # Example
 For example, you can try othello demo. Two computer agents automatically fight against each other.
-```
-autogames_server --game othello_game --port 65432 & # server
-python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello --timeout 3 & # player1 with Python
-python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello --timeout 3 & # player2 with Python
+```bash
+# server of othello game
+autogames_server --game othello_game --port 65432 &
+# computer player1 with Python
+python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
+# player2 with Python
+python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
 ```
 You can fight against computer agents as a player.
 ```bash
-autogames_server --game othello_game --port 65432 & # server
-python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello --timeout 3 & # player1 with Python
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 & # player you
+# server of othello game
+autogames_server --game othello_game --port 65432 &
+# computer player with Python
+python autogames/client/python/client.py --port 65432 --agent-file example_agent_othello &
+# human player (you)
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
 ```
 
 # Usage
 ### Where should I write
-For the main function of game algorithm, you can use `think` function in `autogames/client/(YOUR_LANGUAGE)/agents/(YOUR_AGENT_FLIE)`.
-Example implementation is like below. (`autogames/client/python/agents/example_agent_tictactoe.py`)
+You can use `think` function in autogames/client/(LANGUAGE)/agents/(AGENT_FLIE) for the main function of game algorithm
+
+Example implementation of othello agent is like below. (`autogames/client/python/agents/example_agent_tictactoe.py`)
 ```python
 def think(self):
     return (random.randint(0, 2), random.randint(0, 2))
 ```
 
 ### Fight in localhost
-To fight clients in localhost, you can create your opponents:
-(You can also call these commands in different terminals.)
+To fight clients in localhost, you can create your opponents. You can also call these commands in different terminals.
 ```bash
-autogames_server --game (GAME_TYPE) --port 65432 & # you can list up game types by autogames_server --list
-python autogames/client/python/client.py --port 65432 --agent-file (DEFAULT_AGENT_FLIE) --timeout 3 & # DEFAULT_AGENT_FLIE: e.g. example_agent_othello
+# game server. you can list up game types (GAME_TYPE) by autogames_server --list
+autogames_server --game (GAME_TYPE) --port 65432 &
+# computer player. AGENT_FLIE is the file name in agents dir (e.g. example_agent_othello)
+python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) --timeout 3 &
 ```
 
 Then, you can create your agent.
 ##### Python
 ```bash
-python autogames/client/python/client.py --port 65432 --agent-file (YOUR_AGENT_FLIE) --timeout 3 & # your agent
+# your agent
+python autogames/client/python/client.py --port 65432 --agent-file (AGENT_FLIE) --timeout 3 &
 ```
 ##### C
 ```bash
-cd autogames/client/c/; make client_c AGENT_FILE=(YOUR_AGENT_FLIE); cd -; ./autogames/client/c/client_c 65432 & # YOUR_AGENT_FLIE: e.g. example_agent_tictactoe.c
+# compile C program
+cd autogames/client/c/;
+# AGENT_FLIE: e.g. example_agent_tictactoe.c
+make client_c AGENT_FILE=(AGENT_FLIE);
+cd -;
+# your agent
+./autogames/client/c/client_c 65432 &
 ```
 
 ##### Human mode
 ```bash
-python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 & # human mode
+# human mode. You can play game interactively.
+python autogames/client/python/client.py --port 65432 --agent-file human_agent --timeout 30 &
 ```
 
 # Available games
@@ -85,7 +101,7 @@ python autogames/client/python/client.py --port 65432 --agent-file human_agent -
     2|X|O|X|
    ```
    - （言語間で名前が統一された）変数や関数の用途を説明する
-   - どういう情報をsocket通信したらよいかを分かりやすくまとめる
+   - 通信するjsonの中身を貼り、どういう情報をsocket通信したらよいかを説明する。(jsonは全ゲーム共通か？)
 
 ### Othello
    - オセロ、リバーシ(othello game)
@@ -111,6 +127,6 @@ python autogames/client/python/client.py --port 65432 --agent-file human_agent -
    - No data
 
 ### Languages
- - Python 2.x
- - Python 3.x
- - C
+ - Python 2.7
+ - Python 3.6
+ - C (gcc 5.4.0)
